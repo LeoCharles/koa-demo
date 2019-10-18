@@ -1,48 +1,34 @@
 const Koa = require('koa')
-const session = require('koa-session-minimal')
-const MysqlSession = require('koa-mysql-session')
 
+// 创建实例
 const app = new Koa()
 
-// 配置存储 session 信息的 MySQL
-let store = new MysqlSession({
-  user: 'root',
-  password: '123456',
-  database: 'koa_demo',
-  host: '127.0.0.1',
-  port: 3306
+// logger
+app.use(async (ctx, next) => {
+  // 暂停，进入下一个中间件 x-response-time  ---> 步骤 1
+  await next()
+  // 再次进入该中间件，从响应头中获取响应时间并打印  ---> 步骤 5
+  const rt = ctx.response.get('X-Response-Time')
+  console.log(`${ctx.method} ${ctx.url} - ${rt}`)
 })
 
-// 存放sessionId的cookie配置
-let cookie = {
-  demain: 'localhost',             // 写 cookie 所在的域名
-  path: '/',                       // 写 cookie 所在的路径
-  maxAge: 1000*60*60*24,           // cookie 有效时长（24小时）
-  expires: new Date('2019-10-20'), // cookie 失效日期
-  httpOnly: false,                 // 是否仅通过 HTTP(S) 发送
-  overwrite: false                 // 是否允许重写
-}
-
-app.use(session({
-  key: 'SEESION_ID',
-  store: store,
-  cookie: cookie
-}))
-
-// 使用 session 中间件
-app.use(async (ctx) => {
-  // 设置 session
-  if (ctx.url === '/set') {
-    ctx.session = {
-      user_id: Math.random().toString(36).substr(2),
-      count: 0
-    }
-    ctx.body = ctx.session
-  } else if(ctx.url === '/') {
-    // 读取 session 信息
-    ctx.session.count  = ctx.session.count + 1
-    ctx.body = ctx.session
-  }
+// x-response-time
+app.use(async (ctx, next) => {
+  // 进入中间件，记录开始时间
+  const start = Date.now()
+  // 暂停，进入下一个中间件 response ---> 步骤 2
+  await next()
+  // 再次进入该中间件，记录两次进入该中间件的时间，并保存到响应头  ---> 步骤 4
+  const ms = Date.now() - start;
+  ctx.set('X-Response-Time', `${ms}ms`)
+  // 返回上一个中间件
 })
 
-app.listen(3000, () => console.log('http server is runing at port 3000'))
+// response
+app.use(async ctx => {
+  // 进入中间件，返回响应数据
+  ctx.body = 'hello koa!'
+  // 后面没有 app.use, 返回上一个中间件 ---> 步骤 3
+})
+
+app.listen(3000, () => console.log('http server is running at port 3000'))

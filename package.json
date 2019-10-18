@@ -4,19 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon server.js",
-    "start": "nodemon index.js"
+    "start": "nodemon index01.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "colors": "^1.4.0",
+    "ejs": "^2.7.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-mysql-session": "^0.0.2",
     "koa-router": "^7.4.0",
     "koa-session-minimal": "^3.0.4",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "koa-views": "^6.2.1"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
