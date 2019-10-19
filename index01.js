@@ -1,9 +1,9 @@
 const Koa = require('koa')
 const fs = require('fs')
 const colors = require('colors') // 用来设置 console 颜色
-
-// 自定义路由 demo
 const app = new Koa()
+
+/* 自定义路由 demo */
 
 // 用 promise 封装异步读取文件方法
 function render(page) {
@@ -18,7 +18,7 @@ function render(page) {
 // 自定义路由中间件
 async function route(ctx) {
   let view = '404.html'
-  
+
   // 通过 判断 ctx.request.url 来实现路由
   const url = ctx.request.url
   switch(url) {

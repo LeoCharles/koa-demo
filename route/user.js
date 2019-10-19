@@ -1,13 +1,7 @@
-const Router = require('koa-router')
-
-const router = new Router()
+const router = new require('koa-router')()
 
 router
-  .get('/', async (ctx) => {
-    ctx.body = 'user index page'
-  })
-  .get('/login', async (ctx) => {
-    ctx.body = 'user login page'
-  })
+  .get('/', async (ctx) => {ctx.body = 'user index page'})
+  .get('/login', async (ctx) => {ctx.body = 'user login page'})
 
 module.exports = router

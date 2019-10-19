@@ -1,6 +1,4 @@
-const Router = require('koa-router')
-
-const router = new Router()
+const router = new require('koa-router')()
 
 router
   .get('/', async (ctx) => {ctx.body = 'home page'})

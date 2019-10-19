@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index01.js"
+    "start": "nodemon index02.js"
   },
   "keywords": [],
   "author": "",
@@ -14,6 +14,7 @@
     "ejs": "^2.7.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-logger": "^3.2.1",
     "koa-mysql-session": "^0.0.2",
     "koa-router": "^7.4.0",
     "koa-session-minimal": "^3.0.4",
