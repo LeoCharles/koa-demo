@@ -6,7 +6,7 @@ const userRoute = require('./route/user')
 const logger = require('koa-logger')
 const app = new Koa()
 
-/* koa-router 实现路由  demo */
+/* koa-router 实现路由 */
 
 // 挂载所有路由
 router.use('/', indexRoute.routes(), indexRoute.allowedMethods())

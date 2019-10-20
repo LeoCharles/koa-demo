@@ -4,7 +4,7 @@ const Koa = require('koa')
 const log4js = require('log4js')
 const app = new Koa()
 
-/* 日志相关的 demo */
+/* 日志信息 */
 
 // 把日志中间件放在最前面
 // app.use(logger()) // 使用 koa-logger 中间件
