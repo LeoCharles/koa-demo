@@ -8,9 +8,6 @@ const app = new Koa()
 
 /* koa-router 实现路由  demo */
 
-// 把日志中间件放在最前面
-app.use(logger())
-
 // 挂载所有路由
 router.use('/', indexRoute.routes(), indexRoute.allowedMethods())
       .use('/product', productRoute.routes(), productRoute.allowedMethods())
