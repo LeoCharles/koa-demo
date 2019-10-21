@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index05.js"
+    "start": "nodemon index06.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "art-template": "^4.13.2",
     "colors": "^1.4.0",
     "ejs": "^2.7.1",
     "koa": "^2.7.0",
+    "koa-art-template": "^1.1.1",
     "koa-bodyparser": "^4.2.1",
     "koa-logger": "^3.2.1",
     "koa-mysql-session": "^0.0.2",
