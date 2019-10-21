@@ -1,3 +1,5 @@
+const path = require('path')
+
 // 资源类型
 const mimes = {
   'css': 'text/css',
@@ -21,4 +23,14 @@ const mimes = {
   'xml': 'text/xml'
 }
 
-module.exports = mimes
+// 解析资源类型
+const getMime = (url) => {
+  let extName = path.extname(url)
+  extName = extName ? extName.slice(1) : 'unknow'
+  return mimes[extName]
+}
+
+module.exports = {
+  mimes,
+  getMime
+}

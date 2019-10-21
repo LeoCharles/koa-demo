@@ -1,6 +1,6 @@
 const fs = require('fs')
 const path = require('path')
-const mimes = require('./mimes')
+const { mimes } = require('./mimes')
 
 // 遍历目录内容（子目录，文件名）
 function walk(reqPath) {
@@ -41,7 +41,7 @@ function file(filePath) {
 }
 
 // 获取静态资源内容
-async function content(ctx, fullStaticPath) {
+async function getContent(ctx, fullStaticPath) {
   // 请求资源的完整路径
   const reqPath = path.join(fullStaticPath, ctx.url)
   // 判断请求路径是否存在目录或文件
@@ -65,4 +65,4 @@ async function content(ctx, fullStaticPath) {
   return content
 }
 
-module.exports = content
+module.exports = getContent
