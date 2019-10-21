@@ -11,7 +11,7 @@ function parseQueryString(queryString) {
 }
 
 // 解析上下文对象里 Node 原生请求的 POST 参数
-module.exports = () => async (ctx) => {
+module.exports = async (ctx) => {
   return new Promise((resolve, reject) => {
     try {
       let postData = ''

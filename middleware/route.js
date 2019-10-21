@@ -10,7 +10,7 @@ function render(page) {
   })
 }
 
-module.exports = () => async(ctx) => {
+module.exports = () => async(ctx, next) => {
   let view = '404.html'
 
   // 通过 判断 ctx.request.url 来实现路由
@@ -36,5 +36,6 @@ module.exports = () => async(ctx) => {
       break
   }
   ctx.body = await render(view)
+  await next()
 }
 
