@@ -3,7 +3,7 @@ const fs = require('fs')
 // 用 promise 封装异步读取文件方法
 function render(page) {
   return new Promise((resolve, reject) => {
-    let viewUrl = `./view/${page}`
+    let viewUrl = `./views/${page}`
     fs.readFile(viewUrl, 'binary', (err, data) => {
       return err ? reject(err) : resolve(data)
     })

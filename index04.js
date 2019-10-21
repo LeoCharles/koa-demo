@@ -1,16 +1,13 @@
 const Koa = require('koa')
-const logger = require('./middleware/logger')
 const route = require('./middleware/route')
 const parsePost = require('./utils/parsePost')
+const bodyParser = require('koa-bodyparser')
 const app = new Koa()
 
 /* 请求数据获取 */
 
-// 自定义日志中间件
-app.use(logger())
 // 自定义路由中间件
 app.use(route())
-
 
 // // get 请求
 // app.use(async (ctx) => {
@@ -35,10 +32,20 @@ app.use(route())
 // })
 
 // post 请求
+// 使用自定义插件
+// app.use(async (ctx) => {if (ctx.url === '/login' && ctx.method === 'POST') {
+//     // 使用自定义 POST 参数解析方法
+//     let postData = await parsePost(ctx)
+//     ctx.body = postData
+//   }
+// })
 
-app.use(async (ctx) => {if (ctx.url === '/login' && ctx.method === 'POST') {
-    // 使用自定义 POST 参数解析方法
-    let postData = await parsePost(ctx)
+// 使用 koa-bodyparser 中间件
+app.use(bodyParser())
+app.use(async (ctx) => {
+  if (ctx.url === '/login' && ctx.method === 'POST') {
+    // 当 POST 请求时，koa-bodyparser 解析 POST 表单里的数据
+    let postData = ctx.request.body
     ctx.body = postData
   }
 })
