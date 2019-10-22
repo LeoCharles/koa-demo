@@ -43,8 +43,9 @@ app.use(async (ctx) => {
     // 读取 session 信息
     ctx.session.count  = ctx.session.count + 1
     ctx.body = ctx.session
+  } else {
+    ctx.body = 'mysql 存储 session'
   }
 })
-
 
 app.listen(3000, () => console.log('http server is runing at port 3000'))

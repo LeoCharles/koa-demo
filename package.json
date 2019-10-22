@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index08.js"
+    "start": "nodemon index10.js"
   },
   "keywords": [],
   "author": "",
@@ -13,9 +13,11 @@
     "art-template": "^4.13.2",
     "colors": "^1.4.0",
     "ejs": "^2.7.1",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-art-template": "^1.1.1",
     "koa-bodyparser": "^4.2.1",
+    "koa-jwt": "^3.6.0",
     "koa-logger": "^3.2.1",
     "koa-mysql-session": "^0.0.2",
     "koa-router": "^7.4.0",
