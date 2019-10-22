@@ -18,7 +18,9 @@ app.use(async (ctx) => {
   })
 })
 
-// // 使用 art-template 模板引擎
+// ==========================================
+
+// 使用 art-template 模板引擎
 // render(app, {
 //   root: path.join(__dirname, './views'),   // views 路径
 //   extname: '.html',                        // 模板文件扩展名

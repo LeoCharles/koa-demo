@@ -25,12 +25,14 @@ const session = () => async(ctx, next) => {
       ctx.cookies.set('sid', sid)
       // 添加到 store
       STORE.push({user, sid})
+      console.log(STORE)
     },
     destory() {
       const index = STORE.find(item => item.sid === this.sid)
       this.user = null
       this.sid = null
       STORE.splice(index, 1)
+      console.log(STORE)
     }
   }
   await next()

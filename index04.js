@@ -31,6 +31,8 @@ app.use(route())
 //   }
 // })
 
+// ==========================================
+
 // post 请求
 // 使用自定义插件
 // app.use(async (ctx) => {if (ctx.url === '/login' && ctx.method === 'POST') {
@@ -39,6 +41,8 @@ app.use(route())
 //     ctx.body = postData
 //   }
 // })
+
+// ==========================================
 
 // 使用 koa-bodyparser 中间件
 app.use(bodyParser())
