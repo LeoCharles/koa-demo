@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>upload</title>
+</head>
+<body>
+  <h2>同步上传文件</h2>
+  <form
+    action="/upload"
+    method="POST"
+    enctype="multipart/form-data"
+    accept="image/jpg,image/png,image/gif">
+    <input name="picture" type="file" />
+    <button type="submit">提交</button>
+  </form>
+  <hr />
+  <h2>异步上传文件</h2>
+  <button id="uploadBtn">选择文件</button>
+  <p>上传进度：<span id="progress">0</span>%</p>
+  <p>上传结果：</p>
+  <div id="picture"></div>
+  <script src="./js/upload.js"></script>
+</body>
+</html>

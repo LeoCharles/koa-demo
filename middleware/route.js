@@ -22,9 +22,6 @@ module.exports = () => async(ctx, next) => {
     case '/index':
       view = 'index.html'
       break
-    case '/login':
-      view = 'login.html'
-      break
     case '/todo':
       view = 'todo.html'
       break
