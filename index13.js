@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const path =require('path')
 const static = require('koa-static')
-const uploadFile = require('./utils/uploadFile')
+const busboy = require('./utils/busboy')
 const app = new Koa()
 
 /* 文件上传 */
@@ -11,7 +11,7 @@ app.use(static(path.join(__dirname, '/static')))
 
 app.use(async ctx => {
   if(ctx.url === '/upload' && ctx.method === 'POST') {
-    ctx.body = await uploadFile(ctx, {
+    ctx.body = await busboy(ctx, {
       type: 'image',
       path: path.join(__dirname, '/static') // 放在静态资源目录前端页面才能加载到
     })
