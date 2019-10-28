@@ -1,12 +1,11 @@
 const mysql = require('mysql')
-const config = require('../config/db')
 
 // 创建连接池
 const pool = mysql.createPool({
-  host: config.host,
-  user: config.user,
-  password: config.password,
-  database: config.database
+  host: 'localhost',
+  user: 'root',
+  password: '123456',
+  database: 'koa_demo'
 })
 
 const query = (sql, params) => {
