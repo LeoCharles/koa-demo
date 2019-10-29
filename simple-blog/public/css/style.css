@@ -1,0 +1,177 @@
+body {
+  color: #314659;
+}
+
+ul, li {
+  list-style: none;
+}
+
+a {
+  color: #314659;
+  text-decoration: none;
+}
+
+.wrapper {
+  width: 60%;
+  min-width: 576px;
+  margin: 0 auto;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.btn {
+  display: inline-block;
+  height: 40px;
+  margin: 0 8px 12px 0;
+  padding: 0 15px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  outline: 0;
+  line-height: 1.5;
+  font-size: 14px;
+  white-space: nowrap;
+  text-align: center;
+  background-color: #fff;
+  color: rgba(0,0,0,0.65);
+  cursor: pointer;
+}
+.btn:hover {
+  color: #1890ff;
+  border-color: #1890ff;
+}
+.btn.btn-primary {
+  color: #fff;
+  background-color: #1890ff;
+  border: 1px solid #1890ff;
+}
+.btn.btn-primary:hover {
+  background-color: #40a9ff;
+  border-color: #40a9ff;
+}
+
+/* 头部 */
+.header {
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.header .welcome {
+  font-size: 18px;
+  color: #1890ff;
+}
+.header .nav {
+  display: flex;
+  margin: 0;
+  text-align: center;
+}
+.header .nav-item {
+  position: relative;
+  min-width: 76px;
+  height: 64px;
+  line-height: 64px;
+  font-size: 16px;
+  color: #314659;
+}
+.header .nav-item.active,
+.header .nav-item:hover {
+  color: #1890ff;
+}
+.header .nav-item > a {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+
+/* 注册登录表单表单 */
+.form {
+  width: 500px;
+  min-width: 420px;
+  margin: 20px auto;
+}
+.form .form-item {
+  line-height: 40px;
+  margin-bottom: 20px;
+}
+.form .form-item label {
+  display: inline-block;
+  width: 20%;
+  text-align: right;
+}
+.form .form-item input, textarea {
+  width: 74%;
+  height: 32px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid #d9d9d9;
+  font-size: 14px;
+  color: rgba(0,0,0,0.65);
+  resize:none
+}
+.form .form-item textarea {
+ height: 100%;
+}
+.form-vertical .form-item label {
+  width: 100%;
+  text-align: left;
+}
+.form-vertical .form-item input, textarea {
+  width: 100%;
+}
+
+/* 文章列表 */
+.list {
+  padding: 24px 24px 32px;
+  border: 1px solid #ebedf0;
+  border-radius: 2px;
+}
+.list .list-item {
+  padding: 12px 0;
+  border-bottom: 1px solid #ebedf0;
+}
+.list .list-item-header {
+  height: 42px;
+  line-height: 42px;
+  display: flex;
+  align-items: center;
+}
+.list .list-item-header .avatar {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+.list .list-item-header .title {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.85);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.list .list-item-body {
+  padding: 12px 0;
+  font-size: 14px;
+  color: rgba(0,0,0,0.65);
+  word-wrap: break-word;
+}
+.list .list-item-footer {
+  height: 32px;
+  line-height: 32px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: rgba(0,0,0,0.45);
+}
+.list .list-item-footer span {
+  display: inline-block;
+  margin-right: 5px;
+}

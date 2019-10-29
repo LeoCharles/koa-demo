@@ -1,0 +1,26 @@
+<%- include('header') %>
+  <div class="wrapper">
+    <form method="post" class="form register">
+      <div class="form-item">
+        <label>用户名：</label>
+        <input type="text" name="username" placeholder="请输入用户名"/>
+      </div>
+      <div class="form-item">
+        <label>密码：</label>
+        <input type="password" name="password" placeholder="请输入密码"/>
+      </div>
+      <div class="form-item">
+        <label>重复密码：</label>
+        <input type="password" name="repeatpass" placeholder="请确认密码"/>
+      </div>
+      <div class="form-item">
+        <label>上传头像：</label>
+        <button class="btn">点击上传</button>
+        <input type="file" name="avatar" id="avatar" style="visibility:hidden;">
+      </div>
+      <div class="center">
+        <button class="btn btn-primary">立即注册</button>
+      </div>
+    </form>
+  </div>
+<% include('footer') %>
