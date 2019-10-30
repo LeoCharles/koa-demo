@@ -14,6 +14,7 @@
     "art-template": "^4.13.2",
     "busboy": "^0.3.1",
     "colors": "^1.4.0",
+    "dayjs": "^1.8.16",
     "ejs": "^2.7.1",
     "formidable": "^1.2.1",
     "jsonwebtoken": "^8.5.1",

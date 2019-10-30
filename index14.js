@@ -14,7 +14,7 @@ const app = new Koa()
 // })
 
 // // 查询数据库
-// connection.query('SELECT * FROM user', (err, results, fields) => {
+// connection.query('SELECT * FROM users', (err, results, fields) => {
 //   if (err) throw err
   
 //   console.log(results)
@@ -37,7 +37,7 @@ const app = new Koa()
 //   if (err) throw err
 
 //   // 查询数据
-//   connection.query('SELECT * FROM user', (error, results, fields) => {
+//   connection.query('SELECT * FROM users', (error, results, fields) => {
 //     if (error) throw error
     
 //     console.log(results)

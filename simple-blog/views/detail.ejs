@@ -1,7 +1,66 @@
 <%- include('header') %>
   <div class="wrapper">
-    <div class="card">
-      文章详情
+    <div class="card article-detail">
+      <div class="card-header">
+        <div class="avatar">
+          <img src="/img/avatar.png" class="avatar" alt="avatar">
+        </div>
+        <div class="desc">
+            <span>作者：leo</span>
+            <span>评论数：0</span>
+            <span>浏览量：0</span>
+            <span>发布时间：2018-10-29 18:49:33</span>
+        </div>
+      </div>
+      <div class="card-body">
+        <h1 class="title">文章标题</h1>
+        <div class="content">
+           文章内容文章内容文章内容文章内容文章内容文章内容文章内容
+          文章内容文章内容文章内容文章内容文章内容文章内容文章内容
+        </div>
+      </div>
+      <div class="card-footer">
+        <span class="edit">编辑</span>
+        <span class="delete">删除</span>
+      </div>
+    </div>
+    <div class="comment-wrapper">
+      <form method="post" class="form form-vertical">
+        <div class="form-item">
+          <textarea name="content" rows="4"></textarea>
+        </div>
+        <div>
+          <button class="btn btn-primary">发表留言</button>
+        </div>
+      </form>
+      <p class="tips">登录之后才可以评论哟~</p>
+      <p class="tips">还没有评论，赶快去评论吧！</p>
+      <ul class="list comment-list">
+        <li class="list-item">
+          <img src="/img/avatar.png" class="avatar" alt="avatar">
+          <div class="list-item-content">
+            <div class="name">leo</div>
+            <div class="comment">评论内容评论内容评论内容评论内容评论内容</div>
+            <div class="time">2018-10-29 18:49:33</div>
+          </div>
+        </li>
+        <li class="list-item">
+          <img src="/img/avatar.png" class="avatar" alt="avatar">
+          <div class="list-item-content">
+            <div class="name">leo</div>
+            <div class="comment">评论内容评论内容评论内容评论内容评论内容</div>
+            <div class="time">2018-10-29 18:49:33</div>
+          </div>
+        </li>
+        <li class="list-item">
+          <img src="/img/avatar.png" class="avatar" alt="avatar">
+          <div class="list-item-content">
+            <div class="name">leo</div>
+            <div class="comment">评论内容评论内容评论内容评论内容评论内容</div>
+            <div class="time">2018-10-29 18:49:33</div>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 <% include('footer') %>
