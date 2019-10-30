@@ -1,26 +1,94 @@
 <%- include('header') %>
-  <div class="wrapper">
-    <form method="post" class="form form-register">
-      <div class="form-item">
-        <label>用户名：</label>
-        <input type="text" name="name" placeholder="请输入用户名"/>
-      </div>
-      <div class="form-item">
-        <label>密码：</label>
-        <input type="password" name="password" placeholder="请输入密码"/>
-      </div>
-      <div class="form-item">
-        <label>重复密码：</label>
-        <input type="password" name="repeatpass" placeholder="请确认密码"/>
-      </div>
-      <div class="form-item">
-        <label>上传头像：</label>
-        <button class="btn">点击上传</button>
-        <input type="file" name="avatar" id="avatar" style="visibility:hidden;">
-      </div>
-      <div class="center">
-        <button class="btn btn-primary">立即注册</button>
-      </div>
-    </form>
-  </div>
+<div class="wrapper">
+  <form method="post" class="form form-register">
+    <div class="form-item">
+      <label>用户名：</label>
+      <input type="text" name="name" placeholder="请输入用户名"/>
+    </div>
+    <div class="form-item">
+      <label>密码：</label>
+      <input type="password" name="password" placeholder="请输入密码"/>
+    </div>
+    <div class="form-item">
+      <label>重复密码：</label>
+      <input type="password" name="repeatpass" placeholder="请确认密码"/>
+    </div>
+    <div class="form-item">
+      <label>上传头像：</label>
+      <button class="btn" id="upload-btn">点击上传</button>
+      <input type="file" id="file" class="hidden">
+      <input type="hidden" name="avatar" id="avatar">
+    </div>
+    <div class="center">
+      <img alt="头像预览" class="preview">
+    </div>
+    <div class="center">
+      <button class="btn btn-primary" id="submit">立即注册</button>
+    </div>
+  </form>
+</div>
+<script>
+  $(document).ready(() => {
+    // 上传头像
+    $('#upload-btn').click(function(e) {
+      e.preventDefault();
+      $('#file').click();
+    })
+    
+    // 将图片转成 base64
+    $('#file').change(function(e) {
+      if (this.files.length === 0) return;
+
+      const file = this.files[0];
+      const $avatar = $('#avatar'); // input:file 类型不能直接赋值，所以用 input:hidden 提交数据
+      const $preview = $('.preview');
+      const reader = new FileReader();
+
+      if (file.size > 1024 * 1024 / 2) {
+        return message('请上传小于 512kb 的图片！')
+      }
+      if (!/image/g.test(file.type)) {
+        return message('请上传图片文件！')
+      }
+
+      // 监听图片读取
+      reader.onload = (e) => {
+        const src = e.target.result;
+        $preview.attr('src', src);
+        $preview.fadeIn();
+
+        // 转成 base64
+        getBase64(src, (dataURL) => {
+          $avatar.val(dataURL);
+        })
+      }
+      // 读取图片
+      reader.readAsDataURL(file)
+    })
+
+    // 提交表单
+    $('#submit').click(function(e) {
+      e.preventDefault();
+
+      if (!$('input[name=name]').val().trim()) {
+        return message('请输入用户名！');
+      }
+      if (!$('input[name=password]').val().trim()) {
+        return message('请输入密码！');
+      }
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+  })
+</script>
 <% include('footer') %>

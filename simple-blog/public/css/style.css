@@ -53,6 +53,23 @@ a {
   border-color: #40a9ff;
 }
 
+/* 提示信息 */
+.message {
+  position: fixed;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 24px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: center;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  z-index: 999;
+  transition: all linear 0.2s;
+}
+
 /* 头部 */
 .header {
   height: 64px;
@@ -96,6 +113,7 @@ a {
   margin: 20px auto;
 }
 .form .form-item {
+  position: relative;
   line-height: 40px;
   margin-bottom: 20px;
 }
@@ -115,6 +133,9 @@ a {
   color: rgba(0,0,0,0.65);
   resize:none
 }
+.form input.hidden {
+  display: none;
+}
 .form .form-item textarea {
  height: 100%;
 }
@@ -128,6 +149,13 @@ a {
 .form-login,
 .form-register {
   width: 500px;
+}
+.form-register .preview {
+  display: none;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin-bottom: 10px;
 }
 
 /* 文章列表 */
