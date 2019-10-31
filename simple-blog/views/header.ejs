@@ -14,14 +14,40 @@
 <body>
   <div class="message"></div>
   <header class="header wrapper">
-    <div class="welcome">欢迎注册登录！</div>
+    <div class="welcome">
+      <%= session.user ? `欢迎，${session.user}` : '欢迎注册登录！' %>！
+    </div>
     <ul class="nav">
-      <li class="nav-item active"><a href="/articles"></a>全部文章</li>
-      <li class="nav-item"><a href="/articles?author=leo"></a>我的文章</li>
-      <li class="nav-item"><a href="/create"></a>发表文章</li>
-      <li class="nav-item"><a href="/register"></a>注册</li>
-      <li class="nav-item"><a href="/login"></a>登录</li>
-      <li class="nav-item"><a href="/logout"></a>登出</li>
+      <% if(session.user) { %>
+        <li class="nav-item <%= type === 'all' ? 'active' : '' %>"><a href="/articles/all"></a>全部文章</li>
+        <li class="nav-item <%= type === 'self' ? 'active' : '' %>"><a href="/articles/self?author=<%= session.user %>"></a>我的文章</li>
+        <li class="nav-item <%= type === 'create' ? 'active' : '' %>"><a href="/articles/create"></a>发表文章</li>
+        <li class="nav-item"><a class="logout" ></a>登出</li>
+      <% } else { %>
+        <li class="nav-item <%= type === 'all' ? 'active' : '' %>"><a href="/articles/all"></a>全部文章</li>
+        <li class="nav-item <%= type === 'register' ? 'active' : '' %>"><a href="/register"></a>注册</li>
+        <li class="nav-item <%= type === 'login' ? 'active' : '' %>""><a href="/login"></a>登录</li>
+      <% } %>
     </ul>
   </header>
-
+<script>
+$(document).ready(() => {
+  // 登出
+  $('.logout').click(() => {
+    $.ajax({
+      url: '/logout',
+      success: (res) => {
+        if (res.code === 200) {
+          message('登出成功')
+          setTimeout(() => {
+            window.location.href = '/'
+          }, 1000)
+        }
+      },
+      error: () => {
+        message('登出失败')
+      }
+    })
+  })
+})
+</script>

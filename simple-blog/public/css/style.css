@@ -100,6 +100,7 @@ a {
   color: #1890ff;
 }
 .header .nav-item > a {
+  cursor: pointer;
   position: absolute;
   top: 0;
   left: 0;

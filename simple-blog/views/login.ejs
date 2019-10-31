@@ -1,4 +1,4 @@
-<%- include('header') %>
+<%- include('header', {type: 'login'}) %>
 <div class="wrapper">
   <form method="post" class="form form-login">
     <div class="form-item">
@@ -34,7 +34,7 @@ $(document).ready(() => {
       url: '/login',
       type: 'POST',
       data: {name: name, password: password},
-      type: 'json',
+      dataType: 'json',
       cache: false,
       success: (res) => {
         if (res.code === 200) {
@@ -43,14 +43,12 @@ $(document).ready(() => {
             window.location.href ='/articles';
           }, 1000)
         } else {
-          $('input').val('');
           message('用户名或密码错误');
+          $('input').val('');
         }
       }
     })
   })
-
-
 
 })
 </script>

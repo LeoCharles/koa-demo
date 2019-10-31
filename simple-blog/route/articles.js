@@ -1,18 +1,41 @@
 const router = require('koa-router')()
 
-// 文章
-router.get('/articles', async (ctx, next) => {
-  await ctx.render('articles')
+// 重定向
+router.get('/', async ctx => {
+  ctx.redirect('/articles/all')
+})
+router.get('/articles', async ctx => {
+  ctx.redirect('/articles/all')
 })
 
-// 文章详情
-router.get('/articles/:id', async (ctx, next) => {
-  await ctx.render('detail')
+// 渲染全部文章页
+router.get('/articles/all', async ctx => {
+  await ctx.render('articles', {
+    type: 'all',
+    session: ctx.session
+  })
 })
 
-// 发表文章
-router.get('/create', async (ctx, next) => {
-  await ctx.render('create')
+// 渲染我的文章页
+router.get('/articles/self', async ctx => {
+  await ctx.render('articles', {
+    type: 'self',
+    session: ctx.session
+  })
+})
+
+// 渲染文章详情页
+router.get('/articles/:id', async ctx => {
+  await ctx.render('detail', {
+    session: ctx.session
+  })
+})
+
+// 渲染文章发表页
+router.get('/articles/create', async ctx => {
+  await ctx.render('create', {
+    session: ctx.session
+  })
 })
 
 module.exports = router

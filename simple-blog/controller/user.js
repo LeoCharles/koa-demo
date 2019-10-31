@@ -13,6 +13,13 @@ exports.getRegister = async ctx => {
 // 提交注册表单
 exports.postRegister = async ctx => {
   const { name, password, avatar } = ctx.request.body
+  if (!name || !password || !avatar) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+
   try {
     // 查询数据库，判断用户名是否存在
     const rows = await mysql.findUserByName(name)
@@ -64,7 +71,6 @@ exports.getLogin = async ctx => {
 // 提交登录表单
 exports.postLogin = async ctx => {
   const { name, password } = ctx.request.body
-  console.log(name, password)
   try {
     // 查询数据库，判断用户密码是否正确
     const rows = await mysql.findUserByName(name)
@@ -97,5 +103,9 @@ exports.postLogin = async ctx => {
 
 // 登出
 exports.getLogout = async ctx => {
-  await ctx.render('articles')
+  ctx.session = null
+  return ctx.body = {
+    code: 200,
+    msg: '登出成功'
+  }
 }
