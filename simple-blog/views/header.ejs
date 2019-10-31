@@ -15,10 +15,11 @@
   <div class="message"></div>
   <header class="header wrapper">
     <div class="welcome">
-      <%= session.user ? `欢迎，${session.user}` : '欢迎注册登录！' %>！
+      <%= session.user ? `欢迎，${session.user}` : '欢迎注册登录！' %>
     </div>
     <ul class="nav">
       <% if(session.user) { %>
+      
         <li class="nav-item <%= type === 'all' ? 'active' : '' %>"><a href="/articles/all"></a>全部文章</li>
         <li class="nav-item <%= type === 'self' ? 'active' : '' %>"><a href="/articles/self?author=<%= session.user %>"></a>我的文章</li>
         <li class="nav-item <%= type === 'create' ? 'active' : '' %>"><a href="/articles/create"></a>发表文章</li>
@@ -26,7 +27,7 @@
       <% } else { %>
         <li class="nav-item <%= type === 'all' ? 'active' : '' %>"><a href="/articles/all"></a>全部文章</li>
         <li class="nav-item <%= type === 'register' ? 'active' : '' %>"><a href="/register"></a>注册</li>
-        <li class="nav-item <%= type === 'login' ? 'active' : '' %>""><a href="/login"></a>登录</li>
+        <li class="nav-item <%= type === 'login' ? 'active' : '' %>"><a href="/login"></a>登录</li>
       <% } %>
     </ul>
   </header>
