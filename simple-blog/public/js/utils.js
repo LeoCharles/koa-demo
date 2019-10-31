@@ -1,4 +1,4 @@
-/* 工具函数 */
+/**前端工具方法 */
 
 // 全局提示
 function message(text) {
@@ -11,7 +11,7 @@ function message(text) {
     $message.animate({
       top: '-50px'
     })
-  }, 3000)
+  }, 2000)
 }
 
 // 获取 base64

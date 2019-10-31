@@ -5,6 +5,8 @@ const conttoller = require('../controller/user')
 router.get('/register', conttoller.getRegister)
 
 // POST 提交注册表单
-router.post('/resiter')
+router.post('/register', conttoller.postRegister)
+
+
 
 module.exports = router

@@ -33,7 +33,7 @@ const query = (sql, params) => {
 
 // 用户表
 const users = `
-  CREATE TABLE IF NOT EXIST users(
+  CREATE TABLE IF NOT EXISTS users(
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL COMMENT '用户名',
     password VARCHAR(100) NOT NULL COMMENT '密码',
@@ -44,7 +44,7 @@ const users = `
 `
 // 文章表
 const articles = `
-  CREATE TABLE IF NOT EXIST articles(
+  CREATE TABLE IF NOT EXISTS articles(
     id INT NOT NULL AUTO_INCREMENT,
     uid VARCHAR(40) NOT NULL COMMENT '用户id',
     name VARCHAR(100) NOT NULL COMMENT '作者',
@@ -61,7 +61,7 @@ const articles = `
 `
 // 评论表
 const comments = `
-  CREATE TABLE IF NOT EXIST comments(
+  CREATE TABLE IF NOT EXISTS comments(
     id INT NOT NULL AUTO_INCREMENT,
     articleid VARCHAR(40) NOT NULL COMMENT '文章id',
     name VARCHAR(100) NOT NULL COMMENT '用户名称',
@@ -81,9 +81,9 @@ createTable(articles)
 createTable(comments)
 
 // 新增用户
-exports.insertUser = (params) => {
+exports.insertUser = (data) => {
   const sql = 'INSERT INTO users set name=?,password=?,avatar=?,time=?;'
-  return query(sql, params)
+  return query(sql, data)
 }
 
 // 删除用户
@@ -92,8 +92,8 @@ exports.deleteUser = (id) => {
   return query(sql)
 }
 
-// 查找用户
-exports.findUser = (id) => {
-  const sql = `SELETE * FROM users WHERE id=${id};`
+// 通过用户名查找用户，注意 name 是字符串类型，必须用引号
+exports.findUserByName = (name) => {
+  const sql = `SELECT * FROM users WHERE name='${name}';`
   return query(sql)
 }
