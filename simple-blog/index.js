@@ -37,9 +37,6 @@ app.use(bodyParser({formLimit: '1mb'}))
 
 // 路由
 app.use(require('./route/articles').routes())
-app.use(require('./route/create').routes())
-app.use(require('./route/register').routes())
-app.use(require('./route/login').routes())
-app.use(require('./route/logout').routes())
+app.use(require('./route/user').routes())
 
 app.listen(config.port, () => console.log('http server is running at port 3000'))

@@ -54,13 +54,11 @@
       // 监听图片读取
       reader.onload = (e) => {
         const src = e.target.result;
-        console.log(src)
         $preview.attr('src', src);
         $preview.fadeIn();
 
         // 转成 base64
         getBase64(src, (dataURL) => {
-          console.log(dataURL)
           $avatar.val(dataURL);
         })
       }
@@ -95,7 +93,7 @@
         return message('请上传头像！');
       }
 
-      // 提交数据
+      // 注册请求
       $.ajax({
         url: '/register',
         type: 'POST',
@@ -120,13 +118,6 @@
           message('注册失败')
         }
       })
-    })
-
-    // 监听键盘事件
-    $(window).keyup(function(e) {
-      if (e.keyCode === 13) {
-        $('#submit').click()
-      }
     })
 
   })

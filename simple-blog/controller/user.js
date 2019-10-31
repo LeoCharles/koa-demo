@@ -3,17 +3,19 @@ const md5 = require('md5')
 const dayjs = require('dayjs')
 const { getRandomStr, uploadImage } = require('../utils/index')
 
-// 注册页面
+// 渲染注册页面
 exports.getRegister = async ctx => {
   await ctx.render('register', {
     session: ctx.session
   })
 }
 
+// 提交注册表单
 exports.postRegister = async ctx => {
   const { name, password, avatar } = ctx.request.body
-  // 先查询数据判断用户名是否存在
-   const rows = await mysql.findUserByName(name)
+  try {
+    // 查询数据库，判断用户名是否存在
+    const rows = await mysql.findUserByName(name)
     if (rows.length !== 0) {
       return ctx.body = {
         code: 500,
@@ -21,13 +23,11 @@ exports.postRegister = async ctx => {
       }
     }
 
-    // 用户名不存在时，在数据库中插入数据
-    const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+    // 上传头像
     const imageName = getRandomStr() + '.png'
-    const path = './simple-blog/public/img/' + imageName
-
-    // 判断头像是否上传成功
+    const path = './simple-blog/public/img/avatar/' + imageName
     const upload= await uploadImage(avatar, path)
+    // 判断头像是否上传成功
     if(!upload) {
       console.log('头像上传失败')
       return ctx.body = {
@@ -35,32 +35,67 @@ exports.postRegister = async ctx => {
         msg: '头像上传失败'
       }
     }
-    try {
-      await mysql.insertUser([name, md5(password), imageName, time])
-      // 开始插入数据
-      console.log('注册成功')
-      return ctx.body = {
-        code: 200,
-        msg: '注册成功'
-      }
-    } catch (err) {
-      console.log(err)
-      return ctx.body = {
-        code: 500,
-        msg: '注册失败'
-      }
+    
+    // 向数据库中插入数据
+    const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+    await mysql.insertUser([name, md5(password), imageName, time])
+    console.log('注册成功')
+    return ctx.body = {
+      code: 200,
+      msg: '注册成功'
     }
+
+  } catch (err) {
+    console.log('注册失败', err)
+    return ctx.body = {
+      code: 500,
+      msg: '注册失败'
+    }
+  }
 }
 
-// 登录页面
+// 渲染登录页面
 exports.getLogin = async ctx => {
   await ctx.render('login', {
     session: ctx.session
   })
 }
 
-// 提交登录表单数据
+// 提交登录表单
 exports.postLogin = async ctx => {
-  // 表单数据
-  const {name, password, avatar} = ctx.request.body
+  const { name, password } = ctx.request.body
+  console.log(name, password)
+  try {
+    // 查询数据库，判断用户密码是否正确
+    const rows = await mysql.findUserByName(name)
+    if(rows.length && rows[0]['name'] === name && rows[0]['password'] === md5(password)) {
+      console.log('登录成功')
+      ctx.session = {
+        user:  rows[0]['name'],
+        id: rows[0]['id']
+      }
+      return ctx.body = {
+        code: 200,
+        msg: '登录成功'
+      }
+    } else {
+      return ctx.body = {
+        code: 500,
+        msg: '用户名或密码错误'
+      }
+    }
+
+
+  } catch (err) {
+    console.log('登录失败', err)
+    return ctx.body = {
+      code: 500,
+      msg: '登录失败'
+    }
+  }
+}
+
+// 登出
+exports.getLogout = async ctx => {
+  await ctx.render('articles')
 }
