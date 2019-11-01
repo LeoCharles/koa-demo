@@ -196,12 +196,13 @@ a {
 }
 .list .list-item-body {
   max-height: 100px;
-  padding: 12px 0;
+  margin: 12px 0;
+  line-height: 1.5;
   font-size: 14px;
   color: rgba(0,0,0,0.65);
   word-wrap: break-word;
   text-indent:2em;
-  overflow-y: auto;
+  overflow: hidden;
 }
 .list .list-item-footer {
   height: 32px;

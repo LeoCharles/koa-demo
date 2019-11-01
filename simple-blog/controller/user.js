@@ -1,10 +1,12 @@
 const mysql = require('../utils/mysql')
 const md5 = require('md5')
 const dayjs = require('dayjs')
-const { getRandomStr, uploadImage } = require('../utils/index')
+const { getRandomStr, uploadImage, checkLogin } = require('../utils/index')
 
 // 渲染注册页面
 exports.getRegister = async ctx => {
+  // 检查是否已登录
+  await checkLogin(ctx)
   await ctx.render('register', {
     session: ctx.session
   })
@@ -63,6 +65,8 @@ exports.postRegister = async ctx => {
 
 // 渲染登录页面
 exports.getLogin = async ctx => {
+  // 检查是否已登录
+  await checkLogin(ctx)
   await ctx.render('login', {
     session: ctx.session
   })
@@ -76,6 +80,7 @@ exports.postLogin = async ctx => {
     const rows = await mysql.findUserByName(name)
     if(rows.length && rows[0]['name'] === name && rows[0]['password'] === md5(password)) {
       console.log('登录成功')
+      // 登录成功保存 session 信息
       ctx.session = {
         user:  rows[0]['name'],
         id: rows[0]['id']
@@ -90,8 +95,6 @@ exports.postLogin = async ctx => {
         msg: '用户名或密码错误'
       }
     }
-
-
   } catch (err) {
     console.log('登录失败', err)
     return ctx.body = {

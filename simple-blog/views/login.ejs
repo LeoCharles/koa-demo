@@ -16,7 +16,6 @@
 </div>
 <script>
 $(document).ready(() => {
-
   $('#login').click(function(e) {
     e.preventDefault();
     const name = $('input[name=name]').val().trim();
@@ -44,12 +43,10 @@ $(document).ready(() => {
           }, 1000)
         } else {
           message('用户名或密码错误');
-          $('input').val('');
         }
       }
     })
   })
-
 })
 </script>
 <% include('footer') %>

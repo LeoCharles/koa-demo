@@ -9,15 +9,15 @@ const pool = mysql.createPool({
   database: config.mysql.database,
 })
 
-// 数据库查询
-const query = (sql, params) => {
+// 数据库操作
+const query = (sql, data) => {
   return new Promise((resolve, reject) => {
     pool.getConnection((error, connection) => {
       if (error) {
         reject(error)
         console.log('数据库连接失败')
       } else {
-        connection.query(sql, params, (err, rows) => {
+        connection.query(sql, data, (err, rows) => {
           if (err) {
             reject(err)
             console.log('数据库操作失败')
@@ -51,7 +51,6 @@ const articles = `
     avatar VARCHAR(100) NOT NULL COMMENT '头像',
     title TEXT(0) NOT NULL COMMENT '文章标题',
     content TEXT(0) NOT NULL COMMENT '文章内容',
-    md TEXT(0) NOT NULL COMMENT 'markdown',
     status VARCHAR(40) NOT NULL DEFAULT '1' COMMENT '文章状态',
     time VARCHAR(40) NOT NULL COMMENT '发布时间',
     pv VARCHAR(40) NOT NULL DEFAULT '0' COMMENT '浏览量',
@@ -82,7 +81,7 @@ createTable(comments)
 
 // 新增用户
 exports.insertUser = (data) => {
-  const sql = 'INSERT INTO users set name=?,password=?,avatar=?,time=?;'
+  const sql = 'INSERT INTO users set name=?, password=?, avatar=?, time=?;'
   return query(sql, data)
 }
 
@@ -95,5 +94,24 @@ exports.deleteUser = (id) => {
 // 通过用户名查找用户，注意 name 是字符串类型，必须用引号
 exports.findUserByName = (name) => {
   const sql = `SELECT * FROM users WHERE name='${name}';`
+  return query(sql)
+}
+
+// 发表文章
+exports.insertArticles = (data) => {
+  const sql = 'INSERT INTO articles set name=?, uid=?, avatar=?, title=?, content=?, time=?;'
+  return query(sql, data)
+}
+
+// 查询所有文章
+exports.findAllArticles = () => {
+  const sql = `SELECT * FROM articles;`
+  return query(sql)
+}
+
+
+// 通过用户名查询文章
+exports.findArticlesByName = (name) => {
+  const sql = `SELECT * FROM articles WHERE name='${name}';`
   return query(sql)
 }

@@ -25,3 +25,31 @@ exports.uploadImage = (dataURL, path) => {
     })
   })
 }
+
+// 检查是否已登录
+exports.checkLogin = async (ctx) => {
+  console.log(ctx.url)
+  if (ctx.url === '/login' || ctx.url === '/register') {
+    // 已登录跳转到文章列表页
+    if (ctx.session && ctx.session.user) {
+      return ctx.redirect('/articles')
+    }
+  } else {
+    if (!ctx.session || !ctx.session.user) {
+      return ctx.redirect('/login')
+    }
+  }  
+}
+
+// 替换非法字符
+exports.replaceDirtyStr = (str) => {
+  if (!str) return
+  return str.replace(/[<>"']/g, target => {
+    return {
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;'
+    }[target]
+  })
+}
