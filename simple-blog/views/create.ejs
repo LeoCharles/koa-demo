@@ -31,7 +31,7 @@ $(document).ready(() => {
 
     // 提交请求
     $.ajax({
-      url: '/articles/create',
+      url: '/create',
       type: 'POST',
       data: {title: title, content: content},
       dataType: 'json',
@@ -40,7 +40,7 @@ $(document).ready(() => {
         if (res.code === 200) {
           message('发表成功');
           setTimeout(() => {
-            window.location.href ='/articles/self';
+            window.location.href ='/articles';
           }, 1000)
         } else {
           message('发表失败');

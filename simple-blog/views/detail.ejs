@@ -1,22 +1,24 @@
 <%- include('header', {type: ''}) %>
+<% if (!article) { %>
+  <p class="tips">暂无内容</p>
+<% } else { %>
   <div class="wrapper">
     <div class="card article-detail">
       <div class="card-header">
         <div class="avatar">
-          <img src="/img/avatar.png" class="avatar" alt="avatar">
+          <img src="/img/avatar/<%= article.avatar %>" class="avatar" alt="avatar">
         </div>
         <div class="desc">
-            <span>作者：leo</span>
-            <span>评论数：0</span>
-            <span>浏览量：0</span>
-            <span>发布时间：2018-10-29 18:49:33</span>
+            <span>作者：<%= article.name %></span>
+            <span>评论数：<%= article.comment %></span>
+            <span>浏览量：<%= article.pv %></span>
+            <span>发布时间：<%= article.time %></span>
         </div>
       </div>
       <div class="card-body">
-        <h1 class="title">文章标题</h1>
+        <h1 class="title"><%= article.title %></h1>
         <div class="content">
-           文章内容文章内容文章内容文章内容文章内容文章内容文章内容
-          文章内容文章内容文章内容文章内容文章内容文章内容文章内容
+          <%- article.content %>
         </div>
       </div>
       <div class="card-footer">
@@ -63,4 +65,8 @@
       </ul>
     </div>
   </div>
+<% } %>
+<script>
+
+</script>
 <% include('footer') %>
