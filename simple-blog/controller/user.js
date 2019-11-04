@@ -44,7 +44,7 @@ exports.postRegister = async ctx => {
         msg: '头像上传失败'
       }
     }
-    
+
     // 向数据库中插入数据
     const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
     await mysql.insertUser([name, md5(password), imageName, time])

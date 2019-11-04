@@ -71,6 +71,11 @@ a {
   transition: all linear 0.2s;
 }
 
+.tips {
+  text-align: center;
+  color: rgba(0,0,0,0.65);
+}
+
 /* 头部 */
 .header {
   height: 64px;
@@ -195,7 +200,7 @@ a {
   color: #1890ff;
 }
 .list .list-item-body {
-  max-height: 100px;
+  /* max-height: 100px; */
   margin: 12px 0;
   line-height: 1.5;
   font-size: 14px;
@@ -274,10 +279,6 @@ a {
 /* 评论 */
 .comment-wrapper .form-vertical .form-item{
   margin-bottom: 5px;
-}
-.comment-wrapper .tips {
-  text-align: center;
-  color: rgba(0,0,0,0.65);
 }
 .list.comment-list {
  padding: 10px;

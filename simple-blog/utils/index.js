@@ -10,8 +10,9 @@ exports.getRandomStr = () => {
 exports.uploadImage = (dataURL, path) => {
   if (!dataURL) return;
   if (!path) return;
-
-  const base64Data = dataURL.replace(/^data:image\/w+;base64,/, '');
+  // 去掉 base64 前面的 data:image\/w+;base64,
+  const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
+  // 把 base64 转成 buffer 对象
   const dataBuffer = new Buffer(base64Data, 'base64')
   return new Promise((resolove, reject) => {
     // 写入文件
@@ -38,7 +39,7 @@ exports.checkLogin = async (ctx) => {
     if (!ctx.session || !ctx.session.user) {
       return ctx.redirect('/login')
     }
-  }  
+  }
 }
 
 // 替换非法字符

@@ -44,6 +44,9 @@ $(document).ready(() => {
         } else {
           message('用户名或密码错误');
         }
+      },
+      error: () => {
+        message('登录失败');
       }
     })
   })
