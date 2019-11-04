@@ -200,14 +200,14 @@ a {
   color: #1890ff;
 }
 .list .list-item-body {
-  /* max-height: 100px; */
   margin: 12px 0;
   line-height: 1.5;
   font-size: 14px;
-  color: rgba(0,0,0,0.65);
   word-wrap: break-word;
   text-indent:2em;
-  overflow: hidden;
+  text-align: justify;
+  color: rgba(0,0,0,0.65);
+  background-image: linear-gradient(-180deg,rgba(255,255,255,0) 0%,#fff 70%);
 }
 .list .list-item-footer {
   height: 32px;
@@ -232,6 +232,7 @@ a {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 20px;
 }
 .card .card-header .avatar {
   display: inline-block;
@@ -253,6 +254,7 @@ a {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  text-align: center;
 }
 .card .card-body .content {
   padding: 12px 0;
@@ -260,6 +262,8 @@ a {
   color: rgba(0,0,0,0.85);
   word-wrap: break-word;
   text-indent:2em;
+  line-height: 1.5;
+  text-align: justify;
 }
 .card .card-footer {
   padding: 10px 0;

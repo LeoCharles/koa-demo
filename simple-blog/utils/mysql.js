@@ -81,7 +81,7 @@ createTable(comments)
 
 // 新增用户
 exports.insertUser = (data) => {
-  const sql = 'INSERT INTO users set name=?, password=?, avatar=?, time=?;'
+  const sql = 'INSERT INTO users SET name=?, password=?, avatar=?, time=?;'
   return query(sql, data)
 }
 
@@ -99,7 +99,7 @@ exports.findUserByName = (name) => {
 
 // 发表文章
 exports.insertArticles = (data) => {
-  const sql = 'INSERT INTO articles set name=?, uid=?, avatar=?, title=?, content=?, time=?;'
+  const sql = 'INSERT INTO articles SET name=?, uid=?, avatar=?, title=?, content=?, time=?;'
   return query(sql, data)
 }
 
@@ -109,9 +109,21 @@ exports.findAllArticles = () => {
   return query(sql)
 }
 
-
 // 通过用户名查询文章
 exports.findArticlesByName = (name) => {
   const sql = `SELECT * FROM articles WHERE name='${name}';`
   return query(sql)
 }
+
+// 通过文章 id 查询文章
+exports.findArticlesById = (id) => {
+  const sql = `SELECT * FROM articles WHERE id='${id}';`
+  return query(sql)
+}
+
+// 更新文章浏览量
+exports.updateArticlePv = (id) => {
+  const sql = `UPDATE articles SET pv= pv + 1 WHERE id='${id}';`
+  return query(sql)
+}
+

@@ -57,12 +57,11 @@ exports.postArticlesCreate = async ctx => {
 
 // 查询文章列表，渲染文章页
 exports.getArticles = async ctx => {
-  // all: 全部文章; self: 我的文章
-  const type = ctx.path.split('/')[2] ? ctx.path.split('/')[2] : 'all'
   let articles = []
   let name = ''
+
   // 通过查询参数获取用户名
-  if (type === 'self' && ctx.querystring) {
+  if (ctx.querystring) {
     // url 传参使用 decodeURIComponent 解码
     name = decodeURIComponent(ctx.querystring.split('=')[1])
   }
@@ -70,16 +69,32 @@ exports.getArticles = async ctx => {
   if (name) {
     // 根据用户名查找文章列表
     articles = await mysql.findArticlesByName(name)
-    console.log(articles.length)
   } else {
     // 查询所有文章
     articles = await mysql.findAllArticles()
-    console.log(articles.length)
   }
-  
+
   await ctx.render('articles', {
-    type: type,
+    type: name ? 'self' : 'all',  // all: 全部文章; self: 我的文章
     session: ctx.session,
     articles: articles
   })
 }
+
+// 文章详情
+exports.getArticleDetail = async ctx => {
+  let articles = []
+
+  const articleId = ctx.params.id
+  if (articleId) {
+    articles = await mysql.findArticlesById(articleId)
+    await mysql.updateArticlePv(articleId)
+  }
+  console.log(articles[0])
+  await ctx.render('detail', {
+    session: ctx.session,
+    article: articles.length ? articles[0] : null
+  })
+}
+
+// 提交评论
