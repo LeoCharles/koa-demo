@@ -18,13 +18,15 @@
       <div class="card-body">
         <h1 class="title"><%= article.title %></h1>
         <div class="content markdown">
-          <%- article.content %>
+          <%- article.markdown ? article.markdown : article.content %>
         </div>
       </div>
-      <div class="card-footer">
-        <span class="edit">编辑</span>
-        <span class="delete">删除</span>
-      </div>
+      <% if(session.user === article.name){ %>
+        <div class="card-footer">
+          <span class="edit" id="edit">编辑</span>
+          <span class="delete" id="delete">删除</span>
+        </div>
+      <% }%>
     </div>
     <div class="comment-wrapper">
       <% if(!session.user){ %>
@@ -51,6 +53,9 @@
                 <div class="comment"><%= item.content %></div>
                 <div class="time"><%= item.time %></div>
               </div>
+              <% if(session.user === item.name ){ %>
+                <span class="delete">删除</span>
+              <% } %>
             </li>
           <% }) %>
         </ul>
@@ -60,6 +65,9 @@
 <% } %>
 <script>
 $(document).ready((e) => {
+  // 文章 id
+  const articleId = window.location.pathname.split('/')[2];
+
   // 发表评论
   let isComment = true
   $('#comment').click(function (e) {
@@ -68,7 +76,6 @@ $(document).ready((e) => {
     isComment = false;
 
     const content = $('textarea').val().trim()
-    const articleId = window.location.pathname.split('/')[2]
     if (!content) {
       isComment = true;
       return message('请输入评论!')
@@ -96,6 +103,18 @@ $(document).ready((e) => {
       }
     })
   })
+
+  // 编辑文章
+  $('#edit').click((e) => {
+    // 跳转到文章编辑页
+    window.location.href =`/edit/${articleId}`;
+  })
+
+  // 删除文章
+  $('#delete').click((e) => {
+     console.log('edit')
+   })
+
 })
 </script>
 <% include('footer') %>

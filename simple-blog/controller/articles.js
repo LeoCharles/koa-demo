@@ -7,6 +7,7 @@ const md = require('markdown-it')() // markdown 语法解析器
 exports.getArticlesCreate = async ctx => {
   await checkLogin(ctx)
   await ctx.render('create', {
+    type: 'create',
     session: ctx.session
   })
 }
@@ -15,7 +16,7 @@ exports.getArticlesCreate = async ctx => {
 exports.postArticlesCreate = async ctx => {
   const { title, content } = ctx.request.body
   const newTitle = replaceDirtyStr(title) // 转义非法字符
-  const newContent = md.render(content)   // 将 markdown 语法解析成 HTML 
+  const mdContent = md.render(content)   // 将 markdown 语法解析成 HTML 
   const name = ctx.session.user
   const avatar = ctx.session.avatar
   const uid = ctx.session.id
@@ -30,7 +31,7 @@ exports.postArticlesCreate = async ctx => {
 
   try {
     // 插入数据库
-    await mysql.insertArticles([name, uid, avatar, newTitle, newContent, time])
+    await mysql.insertArticle([name, uid, avatar, newTitle, mdContent, content, time])
     return ctx.body = {
       code: 200,
       msg: '文章发表成功'
@@ -39,6 +40,69 @@ exports.postArticlesCreate = async ctx => {
     return ctx.body = {
       code: 500,
       msg: '文章发表失败'
+    }
+  }
+}
+
+// 渲染文章编辑页
+exports.getArticlesEdit = async ctx => {
+  await checkLogin(ctx)
+
+  const articleId = ctx.params.id
+  let articles = []
+
+  try {
+    // 根据 id 查文章
+    articles = await mysql.findArticlesById(articleId)
+    // 渲染文章编辑页
+    await ctx.render('create', {
+      type: 'edit',
+      session: ctx.session,
+      article: articles.length ? articles[0] : null
+    })
+  } catch (error) {
+    return ctx.body = {
+      code: 500,
+      msg: '获取文章失败'
+    }
+  }
+}
+
+// 提交文章编辑表单
+exports.postArticlesEdit = async ctx => {
+  const { title, content } = ctx.request.body
+  const articleId = ctx.params.id
+  const name = ctx.session.user
+  const newTitle = replaceDirtyStr(title) // 转义非法字符
+  const mdContent = md.render(content)   // 将 markdown 语法解析成 HTML
+
+  if (!title || !content) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+
+  try {
+    // 根据 id 查文章列表
+    const articles = await mysql.findArticlesById(articleId)
+    if (articles[0]['name'] !== name) {
+      return ctx.body = {
+        code: 500,
+        msg: '无操作权限'
+      }
+    }
+    // 更新数据库
+    await mysql.updateArticle(newTitle, mdContent, content, articleId)
+    return ctx.body = {
+      code: 200,
+      msg: '编辑文章成功'
+    }
+
+  } catch (error) {
+    return ctx.body = {
+      code: 500,
+      msg: '编辑文章失败'
     }
   }
 }

@@ -21,7 +21,7 @@
       <li class="nav-item <%= type === 'all' ? 'active' : '' %>"><a href="/articles"></a>全部文章</li>
       <% if(session && session.user) { %>
       <li class="nav-item <%= type === 'self' ? 'active' : '' %>"><a href="/articles?author=<%= session.user %>"></a>我的文章</li>
-      <li class="nav-item <%= type === 'create' ? 'active' : '' %>"><a href="/create"></a>发表文章</li>
+      <li class="nav-item <%= (type === 'create' || type === 'edit') ? 'active' : '' %>"><a href="/create"></a>发表文章</li>
       <li class="nav-item"><a class="logout" ></a>登出</li>
       <li class="nav-item center"><img src="/img/avatar/<%= session.avatar %>" class="avatar" alt="avatar" /></li>
       <% } else { %>

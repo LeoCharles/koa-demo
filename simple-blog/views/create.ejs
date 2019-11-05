@@ -1,27 +1,34 @@
-<%- include('header', {type: 'create'}) %>
+<%- include('header') %>
 <div class="wrapper">
   <form method="post" class="form form-vertical">
     <div class="form-item">
       <label>标题：</label>
-      <input type="text" name="title" placeholder="请输入标题"/>
+      <input type="text" name="title" value="<%= type === 'edit' ? article.title : '' %>" placeholder="请输入标题"/>
     </div>
     <div class="form-item">
       <label>内容：</label>
-      <textarea name="content" placeholder="请输入内容" rows="12"></textarea>
+      <% if(type === 'edit') { %>
+        <textarea name="content" placeholder="请输入内容" rows="25"><%= article.content %></textarea>
+      <% } else { %>
+        <textarea name="content" placeholder="请输入内容" rows="25"></textarea>
+      <% } %>
     </div>
     <div class="center">
-      <button class="btn btn-primary" id="create">发布文章</button>
+      <% if(type === 'edit') { %>
+        <button class="btn btn-primary" id="edit">确定修改</button>
+      <% } else { %>
+        <button class="btn btn-primary" id="create">确定发布</button>
+      <% } %>
     </div>
   </form>
 </div>
 <script>
 $(document).ready(() => {
-  $('#create').click(function(e) {
-    e.preventDefault()
+  const author = "<%- session.user %>"
 
+  const requestAction = (type) => {
     const title = $('input[name=title]').val().trim();
     const content = $('textarea[name=content]').val().trim();
-
     if (!title) {
       return message('请输入文章标题！');
     }
@@ -29,27 +36,44 @@ $(document).ready(() => {
       return message('请输入文章内容！');
     }
 
-    // 提交请求
+    // 文章 id
+    if (type === 'edit') {
+      var articleId = window.location.pathname.split('/')[2];
+    }
+    
+
     $.ajax({
-      url: '/create',
+      url: type === 'create' ? '/create' : `/edit/${articleId}`,
       type: 'POST',
       data: {title: title, content: content},
       dataType: 'json',
       cache: false,
       success: (res) => {
         if (res.code === 200) {
-          message('发表成功');
+          message(`${type === 'create' ? '文章发表成功' : '文章修改成功'}`);
           setTimeout(() => {
-            window.location.href ='/articles';
+            window.location.href =`/articles?author=${author}`;
           }, 1000)
         } else {
           message(res.msg);
         }
       },
       error: () => {
-        message('异常')
+        message('服务器异常')
       }
     })
+
+  }
+
+  $('#create').click(function(e) {
+    e.preventDefault()
+    requestAction('create')
+  })
+
+  // 修改文章
+  $('#edit').click(function(e) {
+    e.preventDefault()
+    requestAction('edit')
   })
 })
 

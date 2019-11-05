@@ -12,6 +12,12 @@ router.get('/create', controller.getArticlesCreate)
 // 提交文章表单
 router.post('/create', controller.postArticlesCreate)
 
+// 文章编辑页
+router.get('/edit/:id', controller.getArticlesEdit)
+
+// 提交文章编辑表单
+router.post('/edit/:id', controller.postArticlesEdit)
+
 // 渲染全部文章 / 我的文章页
 router.get('/articles', controller.getArticles)
 
@@ -20,5 +26,6 @@ router.get('/articles/:id', controller.getArticleDetail)
 
 // 提交评论
 router.post('/comment', controller.postComment)
+
 
 module.exports = router

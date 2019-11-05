@@ -15,12 +15,12 @@ const query = (sql, data) => {
     pool.getConnection((error, connection) => {
       if (error) {
         reject(error)
-        console.log('数据库连接失败')
+        console.log('数据库连接失败', error)
       } else {
         connection.query(sql, data, (err, rows) => {
           if (err) {
             reject(err)
-            console.log('数据库操作失败')
+            console.log('数据库操作失败', err)
           } else {
             resolve(rows)
           }
@@ -51,6 +51,7 @@ const articles = `
     avatar VARCHAR(100) NOT NULL COMMENT '头像',
     title TEXT(0) NOT NULL COMMENT '文章标题',
     content TEXT(0) NOT NULL COMMENT '文章内容',
+    markdown TEXT(0) NOT NULL COMMENT 'markdown',
     status VARCHAR(40) NOT NULL DEFAULT '1' COMMENT '文章状态',
     time VARCHAR(40) NOT NULL COMMENT '发布时间',
     pv VARCHAR(40) NOT NULL DEFAULT '0' COMMENT '浏览量',
@@ -98,8 +99,14 @@ exports.findUserByName = (name) => {
 }
 
 // 发表文章
-exports.insertArticles = (data) => {
-  const sql = 'INSERT INTO articles SET name=?, uid=?, avatar=?, title=?, content=?, time=?;'
+exports.insertArticle = (data) => {
+  const sql = 'INSERT INTO articles SET name=?, uid=?, avatar=?, title=?, markdown=?, content=?, time=?;'
+  return query(sql, data)
+}
+
+// 修改文章
+exports.updateArticle = (data) => {
+  const sql = 'UPDATE articles SET title=?, markdown=?, content=? WHERE id=?;'
   return query(sql, data)
 }
 

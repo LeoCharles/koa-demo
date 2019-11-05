@@ -9,7 +9,7 @@
           <div class="title"><a href="/articles/<%= item.id %>"><%= item.title %></a></div>
         </div>
         <div class="list-item-body markdown">
-          <%- item.content %>
+          <%- item.markdown ? item.markdown : item.content %>
           <a href="/articles/<%= item.id %>" class="read">阅读全文</a>
         </div>
         <div class="list-item-footer">

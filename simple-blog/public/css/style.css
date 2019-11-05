@@ -300,14 +300,7 @@ a {
   color: rgba(0,0,0,0.45);
 }
 .card .card-body .title {
-  height: 40px;
-  line-height: 40px;
-  margin: 0;
-  font-size: 18px;
   color: rgba(0,0,0,0.85);
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
   text-align: center;
 }
 .card .card-body .content {
@@ -341,6 +334,7 @@ a {
  padding: 10px;
 }
 .list.comment-list .list-item {
+  position: relative;
   padding: 10px 0 5px;
   display: flex;
 }
@@ -371,4 +365,12 @@ a {
   line-height: 20px;
   font-size: 12px;
   color: rgba(0,0,0,0.45);
+}
+.list.comment-list .list-item .delete {
+  position: absolute;
+  top: 15px;
+  right: 0;
+  font-size: 12px;
+  cursor: pointer;
+  color: rgba(0,0,0,0.35);;
 }
