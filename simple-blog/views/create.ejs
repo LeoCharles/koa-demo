@@ -43,8 +43,11 @@ $(document).ready(() => {
             window.location.href ='/articles';
           }, 1000)
         } else {
-          message('发表失败');
+          message(res.msg);
         }
+      },
+      error: () => {
+        message('异常')
       }
     })
   })
