@@ -121,9 +121,34 @@ exports.findArticlesById = (id) => {
   return query(sql)
 }
 
-// 更新文章浏览量
+// 增加文章浏览量
 exports.updateArticlePv = (id) => {
   const sql = `UPDATE articles SET pv= pv + 1 WHERE id='${id}';`
   return query(sql)
 }
 
+// 更新文章评论数
+exports.updateArticleComment = (id, count) => {
+  const sql = `UPDATE articles SET comment='${count}' WHERE id='${id}';`
+  return query(sql)
+}
+
+// 通过文章 id 查询文章评论
+exports.findCommentsByArticleId = (id) => {
+  const sql =`SELECT * FROM comments WHERE articleid='${id}';`
+  return query(sql)
+}
+
+// 通过文章 id 查询文章评论数
+exports.findCommentCountByArticleId = (id) => {
+  const sql =`SELECT COUNT(*) AS count FROM comments WHERE articleid='${id}';`
+  return query(sql)
+}
+
+// 发表文章评论
+exports.insertComment = (data) => {
+  const sql = 'INSERT INTO comments SET name=?, avatar=?, content=?, time=?, articleid=?;'
+  return query(sql, data)
+}
+
+// 获取评论

@@ -11,7 +11,7 @@ exports.uploadImage = (dataURL, path) => {
   if (!dataURL) return;
   if (!path) return;
   // 去掉 base64 前面的 data:image\/w+;base64,
-  const base64Data = dataURL.replace(/^data:image\/png;base64,/, '');
+  const base64Data = dataURL.replace(/^data:image\/\w+;base64,/, '');
   // 把 base64 转成 buffer 对象
   const dataBuffer = new Buffer(base64Data, 'base64')
   return new Promise((resolove, reject) => {

@@ -83,7 +83,8 @@ exports.postLogin = async ctx => {
       // 登录成功保存 session 信息
       ctx.session = {
         user:  rows[0]['name'],
-        id: rows[0]['id']
+        id: rows[0]['id'],
+        avatar: rows[0]['avatar']
       }
       return ctx.body = {
         code: 200,

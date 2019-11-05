@@ -27,46 +27,75 @@
       </div>
     </div>
     <div class="comment-wrapper">
-      <form method="post" class="form form-vertical">
-        <div class="form-item">
-          <textarea name="content" rows="4"></textarea>
-        </div>
-        <div>
-          <button class="btn btn-primary">发表留言</button>
-        </div>
-      </form>
-      <p class="tips">登录之后才可以评论哟~</p>
-      <p class="tips">还没有评论，赶快去评论吧！</p>
-      <ul class="list comment-list">
-        <li class="list-item">
-          <img src="/img/avatar.png" class="avatar" alt="avatar">
-          <div class="list-item-content">
-            <div class="name">leo</div>
-            <div class="comment">评论内容评论内容评论内容评论内容评论内容</div>
-            <div class="time">2018-10-29 18:49:33</div>
+      <% if(!session.user){ %>
+        <p class="tips">登录之后才可以评论哟~</p>
+      <% } else { %>
+        <form method="post" class="form form-vertical">
+          <div class="form-item">
+            <textarea name="content" rows="4"></textarea>
           </div>
-        </li>
-        <li class="list-item">
-          <img src="/img/avatar.png" class="avatar" alt="avatar">
-          <div class="list-item-content">
-            <div class="name">leo</div>
-            <div class="comment">评论内容评论内容评论内容评论内容评论内容</div>
-            <div class="time">2018-10-29 18:49:33</div>
+          <div>
+            <button class="btn btn-primary" id="comment">发表留言</button>
           </div>
-        </li>
-        <li class="list-item">
-          <img src="/img/avatar.png" class="avatar" alt="avatar">
-          <div class="list-item-content">
-            <div class="name">leo</div>
-            <div class="comment">评论内容评论内容评论内容评论内容评论内容</div>
-            <div class="time">2018-10-29 18:49:33</div>
-          </div>
-        </li>
-      </ul>
+        </form>
+      <% } %>
+      <% if(!comments.length){ %>
+        <p class="tips">还没有评论，赶快去评论吧！</p>
+      <% } else { %>
+        <ul class="list comment-list">
+          <% comments.forEach((item) => { %>
+            <li class="list-item">
+              <img src="/img/avatar/<%= item.avatar %>" class="avatar" alt="avatar">
+              <div class="list-item-content">
+                <div class="name"><%= item.name %></div>
+                <div class="comment"><%= item.content %></div>
+                <div class="time"><%= item.time %></div>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
     </div>
   </div>
 <% } %>
 <script>
+$(document).ready((e) => {
+  // 发表评论
+  let isComment = true
+  $('#comment').click(function (e) {
+    e.preventDefault()
+    if (!isComment) return;
+    isComment = false;
 
+    const content = $('textarea').val().trim()
+    const articleId = window.location.pathname.split('/')[2]
+    if (!content) {
+      isComment = true;
+      return message('请输入评论!')
+    }
+    $.ajax({
+      url: '/comment',
+      type: 'POST',
+      data: { content, articleId},
+      dataType: 'json',
+      success: (res) => {
+        isComment = true;
+        if  (res.code === 200) {
+          message('留言发表成功')
+          setTimeout(() => {
+            isComment = true
+            window.location.reload()
+          }, 1000)
+        } else {
+          return message(res.msg)
+        }
+      },
+      error: () => {
+        isComment = true;
+        message('留言发表失败')
+      }
+    })
+  })
+})
 </script>
 <% include('footer') %>

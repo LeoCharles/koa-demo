@@ -14,35 +14,23 @@ exports.getArticlesCreate = async ctx => {
 // 提交文章
 exports.postArticlesCreate = async ctx => {
   const { title, content } = ctx.request.body
-  if (!title || !content ) {
+  const newTitle = replaceDirtyStr(title) // 转义非法字符
+  const newContent = md.render(content)   // 将 markdown 语法解析成 HTML 
+  const name = ctx.session.user
+  const avatar = ctx.session.avatar
+  const uid = ctx.session.id
+  const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+  if (!title || !content || !name || !avatar || !uid) {
     return ctx.body = {
       code: 500,
       msg: '参数错误'
     }
   }
 
-  // 转义非法字符
-  const newTitle = replaceDirtyStr(title)
-  // 将 markdown 语法解析成 HTML 
-  const newContent = md.render(content)
-
   try {
-    // 根据用户名查询用户信息
-    const name = ctx.session.user
-    const userData = await mysql.findUserByName(name)
-    if(userData.length === 0) {
-      return ctx.body = {
-        code: 500,
-        msg: '未找到用户信息'
-      }
-    }
-    const avatar = userData[0]['avatar']
-    const uid = ctx.session.id
-    const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
-
     // 插入数据库
     await mysql.insertArticles([name, uid, avatar, newTitle, newContent, time])
-  
     return ctx.body = {
       code: 200,
       msg: '文章发表成功'
@@ -84,17 +72,53 @@ exports.getArticles = async ctx => {
 // 文章详情
 exports.getArticleDetail = async ctx => {
   let articles = []
+  let comments = []
 
   const articleId = ctx.params.id
   if (articleId) {
+    // 根据 id 查文章列表
     articles = await mysql.findArticlesById(articleId)
+    // 根据 id 查文章评论列表
+    comments = await mysql.findCommentsByArticleId(articleId)
+    // 根据 id 查询文章评论总数
+    const row = await mysql.findCommentCountByArticleId(articleId)
+    // 更新文章评论数
+    await mysql.updateArticleComment(articleId, row[0].count)
+    // 更新文章阅读量
     await mysql.updateArticlePv(articleId)
+
   }
-  console.log(articles[0])
   await ctx.render('detail', {
     session: ctx.session,
-    article: articles.length ? articles[0] : null
+    article: articles.length ? articles[0] : null,
+    comments: comments
   })
 }
 
 // 提交评论
+exports.postComment = async ctx => {
+  const { content, articleId } = ctx.request.body
+  const name = ctx.session.user
+  const avatar = ctx.session.avatar
+  const time = dayjs().format('YYYY-MM-DD HH:mm:ss')
+
+  if (!content || !articleId || !name || !avatar) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+
+  try {
+    await mysql.insertComment([name, avatar, content, time, articleId])
+    return ctx.body = {
+      code: 200,
+      msg: '评论发表成功'
+    }
+  } catch (error) {
+    return ctx.body = {
+      code: 500,
+      msg: '评论发表失败'
+    }
+  }
+}
