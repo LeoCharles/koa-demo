@@ -25,7 +25,7 @@
 /upload
 
 # avatar
-/public/avatar
+/public/img/avatar
 
 npm-debug.log*
 yarn-debug.log*
