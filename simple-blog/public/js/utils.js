@@ -2,6 +2,7 @@
 
 // 全局提示
 function message(text) {
+  $('body').append('<div class="message"></div>')
   const $message = $('.message')
   $message.text(text)
   $message.animate({
@@ -9,9 +10,78 @@ function message(text) {
   }, 200)
   setTimeout(() => {
     $message.animate({
-      top: '-50px'
+      top: '-50px',
+    }, () => {
+      $message.hide('fast', () => {
+        $message.remove()
+      })
     })
   }, 2000)
+}
+
+// 模态框
+function modal(options) {
+  const modalHtml = `
+  <div class="modal">
+    <span class="modal-close">X</span>
+    <div class="modal-header">标题</div>
+    <div class="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-small modal-cancel">取消</button>
+      <button class="btn btn-small btn-primary modal-ok">确定</button>
+    </div>
+  </div>
+  `
+  $('body').append(modalHtml);
+  $('body').append('<div class="modal-mask"></div>');
+
+  const $modal = $('.modal');
+  const $header = $('.modal-header');
+  const $body = $('.modal-body');
+  const $close = $('.modal-close');
+  const $mask = $('.modal-mask');
+  const $cancel = $('.modal-cancel');
+  const $ok = $('.modal-ok');
+
+  if (options.title) {
+    $header.html(options.title)
+  }
+  if (options.content) {
+    $body.html(options.content)
+  }
+
+  // 显示模态框
+  $modal.fadeIn()
+  $mask.fadeIn()
+  // 关闭模态框
+  $close.click((e) => {
+    $modal.fadeOut('fast', () => {
+      $modal.remove();
+    })
+    $mask.fadeOut('fast', () => {
+      $mask.remove();
+    })
+  })
+  // 确定按钮
+  $ok.click(() => {
+    if(options.onOk && typeof options.onOk === 'function') {
+      options.onOk();
+    }
+    $close.trigger('click');
+  })
+  // 取消按钮
+  $cancel.click(() => {
+    if(options.onCancel && typeof options.onCancel === 'function') {
+      options.onCancel()
+    }
+    $close.trigger('click');
+  })
+  // 监听 ESC
+  $(document).keyup((e) => {
+    if(e.keyCode === 27) {
+      $close.trigger('click');
+    }
+  })
 }
 
 // 获取 base64

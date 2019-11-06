@@ -106,8 +106,20 @@ exports.insertArticle = (data) => {
 
 // 修改文章
 exports.updateArticle = (data) => {
-  const sql = 'UPDATE articles SET title=?, markdown=?, content=? WHERE id=?;'
+  const sql = 'UPDATE articles SET title=?, markdown=?, content=? WHERE id=?'
   return query(sql, data)
+}
+
+// 删除文章
+exports.deleteArticle = (id) => {
+  const sql = `DELETE FROM articles WHERE id=${id};`
+  return query(sql)
+}
+
+// 删除文章的所有评论
+exports.deleteArticleComment = (id) => {
+  const sql = `DELETE FROM comments WHERE articleid=${id};`
+  return query(sql)
 }
 
 // 查询所有文章
@@ -152,10 +164,20 @@ exports.findCommentCountByArticleId = (id) => {
   return query(sql)
 }
 
+// 查询评论
+exports.findCommentById = (id) => {
+  const sql =`SELECT * FROM comments WHERE id='${id}';`
+  return query(sql)
+}
+
 // 发表文章评论
 exports.insertComment = (data) => {
   const sql = 'INSERT INTO comments SET name=?, avatar=?, content=?, time=?, articleid=?;'
   return query(sql, data)
 }
 
-// 获取评论
+// 删除评论
+exports.deleteComment = (id) => {
+  const sql = `DELETE FROM comments WHERE id=${id};`
+  return query(sql)
+}

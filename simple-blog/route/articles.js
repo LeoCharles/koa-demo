@@ -18,6 +18,9 @@ router.get('/edit/:id', controller.getArticlesEdit)
 // 提交文章编辑表单
 router.post('/edit/:id', controller.postArticlesEdit)
 
+// 删除文章
+router.delete('/delete/:id', controller.deleteArticle)
+
 // 渲染全部文章 / 我的文章页
 router.get('/articles', controller.getArticles)
 
@@ -26,6 +29,9 @@ router.get('/articles/:id', controller.getArticleDetail)
 
 // 提交评论
 router.post('/comment', controller.postComment)
+
+// 删除评论
+router.delete('/comment/:id', controller.deleteComment)
 
 
 module.exports = router

@@ -37,6 +37,7 @@ exports.postArticlesCreate = async ctx => {
       msg: '文章发表成功'
     }
   } catch (error) {
+    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '文章发表失败'
@@ -61,6 +62,7 @@ exports.getArticlesEdit = async ctx => {
       article: articles.length ? articles[0] : null
     })
   } catch (error) {
+    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '获取文章失败'
@@ -93,16 +95,55 @@ exports.postArticlesEdit = async ctx => {
       }
     }
     // 更新数据库
-    await mysql.updateArticle(newTitle, mdContent, content, articleId)
+    await mysql.updateArticle([newTitle, mdContent, content, articleId])
     return ctx.body = {
       code: 200,
       msg: '编辑文章成功'
     }
 
   } catch (error) {
+    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '编辑文章失败'
+    }
+  }
+}
+
+// 删除文章
+exports.deleteArticle = async ctx => {
+  const articleId = ctx.params.id
+  const name = ctx.session.user
+
+  if (!articleId) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+  try {
+    // 根据 id 查文章列表
+    const articles = await mysql.findArticlesById(articleId)
+    if (articles[0]['name'] !== name) {
+      return ctx.body = {
+        code: 500,
+        msg: '无操作权限'
+      }
+    }
+
+    // 从数据库中删除文章
+    await mysql.deleteArticle(articleId)
+    // 删除文章评论
+    await mysql.deleteArticleComment(articleId)
+    return ctx.body = {
+      code: 200,
+      msg: '删除文章成功'
+    }
+  } catch (error) {
+    console.log(error)
+    return ctx.body = {
+      code: 500,
+      msg: '删除文章失败'
     }
   }
 }
@@ -137,6 +178,7 @@ exports.getArticles = async ctx => {
 exports.getArticleDetail = async ctx => {
   let articles = []
   let comments = []
+  let commentCount = 0
 
   const articleId = ctx.params.id
   if (articleId) {
@@ -145,9 +187,10 @@ exports.getArticleDetail = async ctx => {
     // 根据 id 查文章评论列表
     comments = await mysql.findCommentsByArticleId(articleId)
     // 根据 id 查询文章评论总数
-    const row = await mysql.findCommentCountByArticleId(articleId)
+    const commentRows = await mysql.findCommentCountByArticleId(articleId)
+    commentCount = commentRows[0].count
     // 更新文章评论数
-    await mysql.updateArticleComment(articleId, row[0].count)
+    await mysql.updateArticleComment(articleId, commentCount)
     // 更新文章阅读量
     await mysql.updateArticlePv(articleId)
 
@@ -155,7 +198,8 @@ exports.getArticleDetail = async ctx => {
   await ctx.render('detail', {
     session: ctx.session,
     article: articles.length ? articles[0] : null,
-    comments: comments
+    comments: comments,
+    commentCount: commentCount
   })
 }
 
@@ -180,9 +224,46 @@ exports.postComment = async ctx => {
       msg: '评论发表成功'
     }
   } catch (error) {
+    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '评论发表失败'
+    }
+  }
+}
+
+// 删除评论
+exports.deleteComment = async ctx => {
+  const commentId = ctx.params.id
+  const name = ctx.session.user
+
+  if (!commentId) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+
+  try {
+    const rows = await mysql.findCommentById(commentId)
+    if (rows[0]['name'] !== name) {
+      return ctx.body = {
+        code: 500,
+        msg: '无操作权限'
+      }
+    }
+
+    // 从数据库中删除
+    await mysql.deleteComment(commentId)
+    return ctx.body = {
+      code: 200,
+      msg: '删除评论成功'
+    }
+  } catch (error) {
+    console.log(error)
+    return ctx.body = {
+      code: 500,
+      msg: '删除评论失败'
     }
   }
 }

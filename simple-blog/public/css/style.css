@@ -26,8 +26,8 @@ a {
 .btn {
   display: inline-block;
   height: 40px;
-  margin: 0 8px 12px 0;
-  padding: 0 15px;
+  margin: 0 8px 0 0;
+  padding: 0 16px;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   outline: 0;
@@ -52,7 +52,10 @@ a {
   background-color: #40a9ff;
   border-color: #40a9ff;
 }
-
+.btn.btn-small {
+  height: 32px;
+  padding: 0 8px;
+}
 /* 提示信息 */
 .message {
   position: fixed;
@@ -74,6 +77,66 @@ a {
 .tips {
   text-align: center;
   color: rgba(0,0,0,0.65);
+}
+
+/* 模态框 */
+.modal {
+  display: none;
+  box-sizing: border-box;
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  width: 480px;
+  transform: translateX(-240px);
+  border: 0;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  line-height: 1.5;
+  font-size: 14px;
+  color: rgba(0,0,0,0.65);
+  background-color: #fff;
+  z-index: 1000;
+}
+.modal .modal-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e8e8e8;
+  border-radius: 4px 4px 0 0;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+  color: rgba(0,0,0,0.65);
+  background: #fff;
+}
+.modal .modal-body {
+  padding: 24px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+.modal .modal-footer {
+  padding: 12px 16px;
+  text-align: right;
+  background: transparent;
+  border-top: 1px solid #e8e8e8;
+  border-radius: 0 0 4px 4px;
+}
+.modal-close {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  font-size: 18px;
+  cursor: pointer;
+}
+.modal-mask {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  height: 100%;
+  background-color: rgba(0,0,0,0.45);
 }
 
 /* markdown */
@@ -366,7 +429,7 @@ a {
   font-size: 12px;
   color: rgba(0,0,0,0.45);
 }
-.list.comment-list .list-item .delete {
+.list.comment-list .delete-comment {
   position: absolute;
   top: 15px;
   right: 0;

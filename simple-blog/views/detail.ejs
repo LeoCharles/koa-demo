@@ -10,7 +10,7 @@
         </div>
         <div class="desc">
             <span>作者：<%= article.name %></span>
-            <span>评论数：<%= article.comment %></span>
+            <span>评论数：<%= commentCount %></span>
             <span>浏览量：<%= article.pv %></span>
             <span>发布时间：<%= article.time %></span>
         </div>
@@ -54,7 +54,7 @@
                 <div class="time"><%= item.time %></div>
               </div>
               <% if(session.user === item.name ){ %>
-                <span class="delete">删除</span>
+                <span class="delete-comment" data-id="<%= item.id %>">删除</span>
               <% } %>
             </li>
           <% }) %>
@@ -67,18 +67,20 @@
 $(document).ready((e) => {
   // 文章 id
   const articleId = window.location.pathname.split('/')[2];
+  // 用户
+  const author = "<%- session.user %>";
 
   // 发表评论
   let isComment = true
-  $('#comment').click(function (e) {
-    e.preventDefault()
+  $('#comment').click((e) => {
+    e.preventDefault();
     if (!isComment) return;
     isComment = false;
 
-    const content = $('textarea').val().trim()
+    const content = $('textarea').val().trim();
     if (!content) {
       isComment = true;
-      return message('请输入评论!')
+      return message('请输入评论!');
     }
     $.ajax({
       url: '/comment',
@@ -88,18 +90,18 @@ $(document).ready((e) => {
       success: (res) => {
         isComment = true;
         if  (res.code === 200) {
-          message('留言发表成功')
+          message('留言发表成功');
           setTimeout(() => {
-            isComment = true
-            window.location.reload()
+            isComment = true;
+            window.location.reload();
           }, 1000)
         } else {
-          return message(res.msg)
+          return message(res.msg);
         }
       },
       error: () => {
         isComment = true;
-        message('留言发表失败')
+        message('留言发表失败');
       }
     })
   })
@@ -112,9 +114,52 @@ $(document).ready((e) => {
 
   // 删除文章
   $('#delete').click((e) => {
-     console.log('edit')
-   })
+    modal({
+      title: '删除文章',
+      content: '确定删除文章吗?',
+      onOk: () => {
+        $.ajax({
+          url: `/delete/${articleId}`,
+          type: 'DELETE',
+          success: (res) => {
+            if (res.code === 200) {
+              message('文章删除成功');
+              setTimeout(() => {
+                window.location.href =`/articles?author=${author}`;
+              }, 1000)
+            } else {
+              message(res.msg);
+            }
+          },
+          error: () => {
+            message('服务器异常');
+          }
+        })
+      }
+    })
+  })
 
+  // 删除评论
+  $('.delete-comment').click(function(e) {
+    const id = $(this).data('id')
+    $.ajax({
+      url: `/comment/${id}`,
+      type: 'DELETE',
+      success: (res) => {
+        if (res.code === 200) {
+          message('评论删除成功');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000)
+        } else {
+          message(res.msg);
+        }
+      },
+      error: () => {
+        message('服务器异常');
+      }
+    })
+  })
 })
 </script>
 <% include('footer') %>

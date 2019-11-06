@@ -52,7 +52,8 @@ exports.postRegister = async ctx => {
       msg: '注册成功'
     }
 
-  } catch (err) {
+  } catch (error) {
+    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '注册失败'
@@ -99,7 +100,8 @@ exports.postLogin = async ctx => {
         msg: '密码错误'
       }
     }
-  } catch (err) {
+  } catch (error) {
+    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '登录失败'
