@@ -152,13 +152,17 @@ exports.deleteArticle = async ctx => {
 exports.getArticles = async ctx => {
   let articles = []
   let name = ''
+  let page = 1
 
   // 通过查询参数获取用户名
-  if (ctx.querystring) {
+  if (ctx.query.author) {
     // url 传参使用 decodeURIComponent 解码
-    name = decodeURIComponent(ctx.querystring.split('=')[1])
+    name = decodeURIComponent(ctx.query.author)
   }
-  
+  if (ctx.query.page) {
+    page = ctx.query.page
+  }
+
   if (name) {
     // 根据用户名查找文章列表
     articles = await mysql.findArticlesByName(name)
@@ -170,7 +174,8 @@ exports.getArticles = async ctx => {
   await ctx.render('articles', {
     type: name ? 'self' : 'all',  // all: 全部文章; self: 我的文章
     session: ctx.session,
-    articles: articles
+    articles: articles,
+    articleCount: 15
   })
 }
 

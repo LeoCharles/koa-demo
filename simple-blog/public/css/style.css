@@ -437,3 +437,12 @@ a {
   cursor: pointer;
   color: rgba(0,0,0,0.35);;
 }
+
+/* 分页 */
+#pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 30px auto;
+  user-select: none;
+}

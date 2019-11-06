@@ -7,8 +7,10 @@
   <title>simple-blog</title>
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
   <link rel="stylesheet" href="/css/normalize.css">
+  <link rel="stylesheet" href="/css/jquery.sPage.css">
   <link rel="stylesheet" href="/css/style.css">
   <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+  <script src="/js/jquery.sPage.js"></script>
   <script src="/js/utils.js"></script>
 </head>
 <body>
@@ -30,7 +32,7 @@
     </ul>
   </header>
 <script>
-$(document).ready(() => {
+$(function() {
   // 登出
   $('.logout').click(() => {
     $.ajax({

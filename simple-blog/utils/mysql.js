@@ -123,7 +123,7 @@ exports.deleteArticleComment = (id) => {
 }
 
 // 查询所有文章
-exports.findAllArticles = () => {
+exports.findAllArticles = (page, name) => {
   const sql = `SELECT * FROM articles;`
   return query(sql)
 }

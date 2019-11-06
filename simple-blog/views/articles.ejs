@@ -29,9 +29,32 @@
     <p class="tips">暂时没有文章，快去发表吧！</p>
   <% } %>
 </div>
+<div id="pagination"></div>
 <script>
-$(document).ready(() => {
-  console.log(window.location.pathname.split('/')[2])
+$(function() {
+  // 文章总数
+  const articleCount = '<%= articleCount %>'
+  const type = '<%= type %>'
+  const author = type === 'self' && '<%= session.user %>'
+
+  $('#pagination').sPage({
+    page: 1,
+    pageSize: 10, // 每页默认 10 条
+    totalText: `共 {total} 条`,
+    showTotal: true,
+    showSkip: articleCount > 100 ? true : false,
+    total: articleCount,
+    backFun: (page) => {
+      $.ajax({
+        url: type === 'self' ? `/articles?author=${author}&page=${page}`: `/articles?page=${page}`,
+        type: 'GET',
+        error: () => {
+          message('服务器异常')
+        }
+      })
+    }
+  })
+  
 
 })
 </script>
