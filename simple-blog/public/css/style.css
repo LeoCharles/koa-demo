@@ -271,6 +271,9 @@ a {
   border: 1px solid #ebedf0;
   border-radius: 2px;
 }
+.list .list-item:last-child {
+  border-bottom: none;
+}
 .list .list-item {
   padding: 16px 0;
   border-bottom: 1px solid #ebedf0;
@@ -390,11 +393,23 @@ a {
 }
 
 /* 评论 */
+.comment-wrapper {
+  position: relative;
+}
+.comment-wrapper .more {
+  display: none;
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: pointer;
+}
 .comment-wrapper .form-vertical .form-item{
   margin-bottom: 5px;
 }
 .list.comment-list {
  padding: 10px;
+ margin-bottom: 50px;
 }
 .list.comment-list .list-item {
   position: relative;

@@ -27,6 +27,9 @@ router.get('/articles', controller.getArticles)
 // 渲染文章详情页
 router.get('/articles/:id', controller.getArticleDetail)
 
+// 查询评论
+router.get('/comments', controller.getComments)
+
 // 提交评论
 router.post('/comment', controller.postComment)
 

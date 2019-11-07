@@ -32,29 +32,23 @@
 <div id="pagination"></div>
 <script>
 $(function() {
-  // 文章总数
-  const articleCount = '<%= articleCount %>'
   const type = '<%= type %>'
   const author = type === 'self' && '<%= session.user %>'
+  const articleCount = '<%= articleCount %>'
+  const currPage = '<%= page %>'
+  const pageSize = '<%= size %>'
 
   $('#pagination').sPage({
-    page: 1,
-    pageSize: 10, // 每页默认 10 条
+    page: currPage,
+    pageSize: pageSize,
     totalText: `共 {total} 条`,
     showTotal: true,
     showSkip: articleCount > 100 ? true : false,
     total: articleCount,
     backFun: (page) => {
-      $.ajax({
-        url: type === 'self' ? `/articles?author=${author}&page=${page}`: `/articles?page=${page}`,
-        type: 'GET',
-        error: () => {
-          message('服务器异常')
-        }
-      })
+      window.location.href = type === 'self' ? `/articles?author=${author}&page=${page}` : `/articles?&page=${page}`
     }
   })
-  
 
 })
 </script>

@@ -122,15 +122,27 @@ exports.deleteArticleComment = (id) => {
   return query(sql)
 }
 
-// 查询所有文章
-exports.findAllArticles = (page, name) => {
-  const sql = `SELECT * FROM articles;`
+// 查询所有文章 - 分页，默认每页 10 条
+exports.findAllArticles = (page, size = 10) => {
+  const sql = `SELECT * FROM articles LIMIT ${(page - 1) * size}, ${size};`
+  return query(sql)
+}
+
+// 查询所有文章数量
+exports.findAllArticlesCount = () => {
+  const sql = `SELECT COUNT(*) AS count FROM articles;`
   return query(sql)
 }
 
 // 通过用户名查询文章
-exports.findArticlesByName = (name) => {
-  const sql = `SELECT * FROM articles WHERE name='${name}';`
+exports.findArticlesByName = (name, page, size = 10) => {
+  const sql = `SELECT * FROM articles WHERE name='${name}' ORDER BY id DESC LIMIT ${(page - 1) * size}, ${size};`
+  return query(sql)
+}
+
+// 查询个人所有文章数
+exports.findArticlesCountByName = (name) => {
+  const sql = `SELECT COUNT(*) AS count FROM articles WHERE name='${name}';`
   return query(sql)
 }
 
@@ -152,13 +164,13 @@ exports.updateArticleComment = (id, count) => {
   return query(sql)
 }
 
-// 通过文章 id 查询文章评论
-exports.findCommentsByArticleId = (id) => {
-  const sql =`SELECT * FROM comments WHERE articleid='${id}';`
+// 分页查询文章评论
+exports.findCommentsByArticleId = (id, page, size = 10) => {
+  const sql =`SELECT * FROM comments WHERE articleid='${id}' LIMIT ${(page - 1) * size}, ${size};`
   return query(sql)
 }
 
-// 通过文章 id 查询文章评论数
+// 查询文章评论数
 exports.findCommentCountByArticleId = (id) => {
   const sql =`SELECT COUNT(*) AS count FROM comments WHERE articleid='${id}';`
   return query(sql)

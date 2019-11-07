@@ -10,7 +10,7 @@
         </div>
         <div class="desc">
             <span>作者：<%= article.name %></span>
-            <span>评论数：<%= commentCount %></span>
+            <span>评论数：<span id="comment-count"><%= commentCount %></span></span>
             <span>浏览量：<%= article.pv %></span>
             <span>发布时间：<%= article.time %></span>
         </div>
@@ -46,7 +46,7 @@
       <% } else { %>
         <ul class="list comment-list">
           <% comments.forEach((item) => { %>
-            <li class="list-item">
+            <li class="list-item key-<%= item.id %>">
               <img src="/img/avatar/<%= item.avatar %>" class="avatar" alt="avatar">
               <div class="list-item-content">
                 <div class="name"><%= item.name %></div>
@@ -59,6 +59,7 @@
             </li>
           <% }) %>
         </ul>
+        <a class="more" id="more">查看更多></a>
       <% } %>
     </div>
   </div>
@@ -68,18 +69,19 @@ $(function() {
   // 文章 id
   const articleId = window.location.pathname.split('/')[2];
   // 用户
-  const author = "<%- session.user %>";
+  const user = "<%- session.user %>";
 
   // 发表评论
-  let isComment = true
-  $('#comment').click((e) => {
+  const $comment = $('#comment')
+  $comment.click((e) => {
     e.preventDefault();
-    if (!isComment) return;
-    isComment = false;
+    
+    // 禁用按钮
+    $comment.attr('disabled', true);
 
     const content = $('textarea').val().trim();
     if (!content) {
-      isComment = true;
+      $comment.removeAttr('disabled')
       return message('请输入评论!');
     }
     $.ajax({
@@ -88,11 +90,11 @@ $(function() {
       data: { content, articleId},
       dataType: 'json',
       success: (res) => {
-        isComment = true;
+        $comment.removeAttr('disabled')
         if  (res.code === 200) {
           message('留言发表成功');
           setTimeout(() => {
-            isComment = true;
+            
             window.location.reload();
           }, 1000)
         } else {
@@ -100,7 +102,7 @@ $(function() {
         }
       },
       error: () => {
-        isComment = true;
+        $comment.removeAttr('disabled')
         message('留言发表失败');
       }
     })
@@ -125,7 +127,7 @@ $(function() {
             if (res.code === 200) {
               message('文章删除成功');
               setTimeout(() => {
-                window.location.href =`/articles?author=${author}`;
+                window.location.href =`/articles?author=${user}`;
               }, 1000)
             } else {
               message(res.msg);
@@ -139,8 +141,11 @@ $(function() {
     })
   })
 
+  
   // 删除评论
-  $('.delete-comment').click(function(e) {
+  const $commentList = $('.comment-list')
+  let commentCount = '<%= commentCount %>'
+  $commentList.on('click', '.delete-comment', function (e) {
     const id = $(this).data('id')
     $.ajax({
       url: `/comment/${id}`,
@@ -149,7 +154,10 @@ $(function() {
         if (res.code === 200) {
           message('评论删除成功');
           setTimeout(() => {
-            window.location.reload();
+            // 修改评论数
+            $('#comment-count').html(Number(commentCount) - 1);
+            // 移除本条评论
+            $('.list-item').remove(`.key-${id}`);
           }, 1000)
         } else {
           message(res.msg);
@@ -160,6 +168,54 @@ $(function() {
       }
     })
   })
+
+  // 查看更多评论
+  let commentSize = '<%= commentSize %>'
+  let commentPage = '<%= commentPage %>'
+  // 判断是否显示 “查看更多” 按钮
+  if (commentPage * commentSize < commentCount) {
+    $('#more').show()
+  }
+
+  $('#more').click((e) => {
+    let html = ''
+    // 加载下一页
+    commentPage = Number(commentPage) + 1
+
+    $.ajax({
+      url: `/comments?aid=${articleId}&page=${commentPage}`,
+      type: 'GET',
+      success: (res) => {
+        if (res.code === 200) {
+          const { comments, commentPage, commentSize } = res.data;
+          comments.forEach(item => {
+            html += `
+            <li class="list-item">
+              <img src="/img/avatar/${item.avatar}" class="avatar" alt="avatar">
+              <div class="list-item-content">
+                <div class="name">${item.name}</div>
+                <div class="comment">${item.content}</div>
+                <div class="time">${item.time}</div>
+              </div>
+              ${ user === item.name ? `<span class="delete-comment" data-id="${item.id}">删除</span>` : ''} 
+            </li>
+            `
+          })
+          $commentList.append(html);
+          // 判断是否显示 “查看更多” 按钮
+          if (commentPage * commentSize > commentCount) {
+            $('#more').hide()
+          }
+        } else {
+          message(res.msg);
+        }
+      },
+      error: () => {
+        message('服务器异常');
+      }
+    })
+  })
+
 })
 </script>
 <% include('footer') %>

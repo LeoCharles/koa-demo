@@ -37,7 +37,6 @@ exports.postArticlesCreate = async ctx => {
       msg: '文章发表成功'
     }
   } catch (error) {
-    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '文章发表失败'
@@ -62,7 +61,6 @@ exports.getArticlesEdit = async ctx => {
       article: articles.length ? articles[0] : null
     })
   } catch (error) {
-    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '获取文章失败'
@@ -102,7 +100,6 @@ exports.postArticlesEdit = async ctx => {
     }
 
   } catch (error) {
-    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '编辑文章失败'
@@ -140,7 +137,6 @@ exports.deleteArticle = async ctx => {
       msg: '删除文章成功'
     }
   } catch (error) {
-    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '删除文章失败'
@@ -151,8 +147,10 @@ exports.deleteArticle = async ctx => {
 // 查询文章列表，渲染文章页
 exports.getArticles = async ctx => {
   let articles = []
+  let articleCount = 0
   let name = ''
   let page = 1
+  let size = 10 // 每页 10 条
 
   // 通过查询参数获取用户名
   if (ctx.query.author) {
@@ -160,22 +158,47 @@ exports.getArticles = async ctx => {
     name = decodeURIComponent(ctx.query.author)
   }
   if (ctx.query.page) {
-    page = ctx.query.page
+    page = Number(ctx.query.page)
   }
 
-  if (name) {
-    // 根据用户名查找文章列表
-    articles = await mysql.findArticlesByName(name)
-  } else {
-    // 查询所有文章
-    articles = await mysql.findAllArticles()
+  try {
+    if (name) {
+      const articleRows = await mysql.findArticlesCountByName(name)
+      articleCount = articleRows[0].count
+      if ( (page - 1) * size > articleCount) {
+        return ctx.body = {
+          code: 500,
+          msg: '文章查询失败, 页码错误'
+        }
+      }
+      // 分页查询用户所有的文章
+      articles = await mysql.findArticlesByName(name, page, size)
+    } else {
+      const articleRows = await mysql.findAllArticlesCount()
+      articleCount = articleRows[0].count
+      if ( (page - 1) * size > articleCount) {
+        return ctx.body = {
+          code: 500,
+          msg: '文章查询失败, 页码错误'
+        }
+      }
+      // 分页查询所有文章
+      articles = await mysql.findAllArticles(page, size)
+    }
+  } catch (error) {
+    return ctx.body = {
+      code: 500,
+      msg: '文章查询失败'
+    }
   }
 
   await ctx.render('articles', {
     type: name ? 'self' : 'all',  // all: 全部文章; self: 我的文章
     session: ctx.session,
     articles: articles,
-    articleCount: 15
+    articleCount: articleCount,
+    page: page,
+    size: size
   })
 }
 
@@ -186,11 +209,16 @@ exports.getArticleDetail = async ctx => {
   let commentCount = 0
 
   const articleId = ctx.params.id
-  if (articleId) {
-    // 根据 id 查文章列表
+
+  if (!articleId) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+  try {
+    // 根据 id 查文章
     articles = await mysql.findArticlesById(articleId)
-    // 根据 id 查文章评论列表
-    comments = await mysql.findCommentsByArticleId(articleId)
     // 根据 id 查询文章评论总数
     const commentRows = await mysql.findCommentCountByArticleId(articleId)
     commentCount = commentRows[0].count
@@ -199,13 +227,75 @@ exports.getArticleDetail = async ctx => {
     // 更新文章阅读量
     await mysql.updateArticlePv(articleId)
 
+    // 查询文章评论列表，默认查询第 1 页 10 条 
+    comments = await mysql.findCommentsByArticleId(articleId, 1, 10)
+    
+  } catch (error) {
+    return ctx.body = {
+      code: 500,
+      msg: '数据库查询失败'
+    }
   }
   await ctx.render('detail', {
     session: ctx.session,
     article: articles.length ? articles[0] : null,
-    comments: comments,
-    commentCount: commentCount
+    comments,
+    commentCount,
+    commentPage: 1,
+    commentSize: 10,
   })
+}
+
+// 分页查询文章评论
+exports.getComments = async ctx => {
+  let commentPage = 1
+  let commentSize = 10
+  let articleId = null
+
+  if (ctx.query.aid) {
+    articleId = ctx.query.aid
+  }
+  if (ctx.query.page) {
+    commentPage = Number(ctx.query.page)
+  }
+
+  if (!articleId) {
+    return ctx.body = {
+      code: 500,
+      msg: '参数错误'
+    }
+  }
+  try {
+    // 查询文章评论总数
+    const commentRows = await mysql.findCommentCountByArticleId(articleId)
+    commentCount = commentRows[0].count
+
+    if ( (commentPage - 1) * commentSize > commentCount) {
+      return ctx.body = {
+        code: 500,
+        msg: '评论查询失败, 页码错误'
+      }
+    }
+    // 分页查询评论
+    comments = await mysql.findCommentsByArticleId(articleId, commentPage, commentSize)
+
+    return ctx.body = {
+      code: 200,
+      msg: '评论查询成功',
+      data: {
+        comments,
+        commentCount,
+        commentPage,
+        commentSize
+      }
+    }
+    
+  } catch (error) {
+    return ctx.body = {
+      code: 500,
+      msg: '评论查询失败'
+    }
+  }
 }
 
 // 提交评论
@@ -229,7 +319,6 @@ exports.postComment = async ctx => {
       msg: '评论发表成功'
     }
   } catch (error) {
-    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '评论发表失败'
@@ -265,7 +354,6 @@ exports.deleteComment = async ctx => {
       msg: '删除评论成功'
     }
   } catch (error) {
-    console.log(error)
     return ctx.body = {
       code: 500,
       msg: '删除评论失败'
