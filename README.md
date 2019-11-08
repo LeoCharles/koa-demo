@@ -41,11 +41,12 @@
 + `koa-bodyparser` 解析表单数据
 + `koa-mysql-session`、`koa-session-minimal` mysql 中存储session 数据
 + `koa-router` 路由中间件
++ `koa-logger` 日志中间件
 + `koa-static` 静态资源加载中间件
 + `koa-views` 模板引擎中间件
 + `ejs` 模板引擎
 + `md5` 加密
-+ `moment` 时间处理
++ `dayjs` 时间处理
 + `markdown-it` markdown 语法
 
 ### 项目演示
