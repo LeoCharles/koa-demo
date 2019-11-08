@@ -94,7 +94,6 @@ $(function() {
         if  (res.code === 200) {
           message('留言发表成功');
           setTimeout(() => {
-            
             window.location.reload();
           }, 1000)
         } else {
@@ -190,7 +189,7 @@ $(function() {
           const { comments, commentPage, commentSize } = res.data;
           comments.forEach(item => {
             html += `
-            <li class="list-item">
+            <li class="list-item key-${item.id}">
               <img src="/img/avatar/${item.avatar}" class="avatar" alt="avatar">
               <div class="list-item-content">
                 <div class="name">${item.name}</div>
