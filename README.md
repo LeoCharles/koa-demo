@@ -48,6 +48,24 @@
 + `moment` 时间处理
 + `markdown-it` markdown 语法
 
-### 演示
+### 项目演示
 
+注册登录：
 
+![注册登录注册](./simple-blog/screenshot/注册登录.gif)
+
+发表文章：
+
+![发表文章](./simple-blog/screenshot/发表文章.gif)
+
+编辑文章：
+
+![编辑文章](./simple-blog/screenshot/编辑文章.gif)
+
+删除文章：
+
+![删除文章](./simple-blog/screenshot/删除文章.gif)
+
+文章分页：
+
+![文章分页](./simple-blog/screenshot/文章分页.gif)
