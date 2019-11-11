@@ -34,40 +34,40 @@ const query = (sql, data) => {
 // 用户表
 const users = `
   CREATE TABLE IF NOT EXISTS users(
-    id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR(100) NOT NULL COMMENT '用户名',
+    id       INT          NOT NULL AUTO_INCREMENT,
+    name     VARCHAR(100) NOT NULL COMMENT '用户名',
     password VARCHAR(100) NOT NULL COMMENT '密码',
-    avatar VARCHAR(100) NOT NULL COMMENT '头像',
-    time VARCHAR(40) NOT NULL COMMENT '注册时间',
+    avatar   VARCHAR(100) NOT NULL COMMENT '头像',
+    time     VARCHAR(40)  NOT NULL COMMENT '注册时间',
     PRIMARY KEY (id)
   );
 `
 // 文章表
 const articles = `
   CREATE TABLE IF NOT EXISTS articles(
-    id INT NOT NULL AUTO_INCREMENT,
-    uid VARCHAR(40) NOT NULL COMMENT '用户id',
-    name VARCHAR(100) NOT NULL COMMENT '作者',
-    avatar VARCHAR(100) NOT NULL COMMENT '头像',
-    title TEXT(0) NOT NULL COMMENT '文章标题',
-    content TEXT(0) NOT NULL COMMENT '文章内容',
-    markdown TEXT(0) NOT NULL COMMENT 'markdown',
-    status VARCHAR(40) NOT NULL DEFAULT '1' COMMENT '文章状态',
-    time VARCHAR(40) NOT NULL COMMENT '发布时间',
-    pv VARCHAR(40) NOT NULL DEFAULT '0' COMMENT '浏览量',
-    comment VARCHAR(40) NOT NULL DEFAULT '0' COMMENT '评论数',
+    id       INT          NOT NULL AUTO_INCREMENT,
+    uid      VARCHAR(40)  NOT NULL COMMENT '用户id',
+    name     VARCHAR(100) NOT NULL COMMENT '作者',
+    avatar   VARCHAR(100) NOT NULL COMMENT '头像',
+    title    TEXT(0)      NOT NULL COMMENT '文章标题',
+    content  TEXT(0)      NOT NULL COMMENT '文章内容',
+    markdown TEXT(0)      NOT NULL COMMENT 'markdown',
+    status   VARCHAR(40)  NOT NULL DEFAULT '1' COMMENT '文章状态',
+    time     VARCHAR(40)  NOT NULL COMMENT '发布时间',
+    pv       VARCHAR(40)  NOT NULL DEFAULT '0' COMMENT '浏览量',
+    comment  VARCHAR(40)  NOT NULL DEFAULT '0' COMMENT '评论数',
     PRIMARY KEY (id)
   );
 `
 // 评论表
 const comments = `
   CREATE TABLE IF NOT EXISTS comments(
-    id INT NOT NULL AUTO_INCREMENT,
-    articleid VARCHAR(40) NOT NULL COMMENT '文章id',
-    name VARCHAR(100) NOT NULL COMMENT '用户名称',
-    avatar VARCHAR(100) NOT NULL COMMENT '头像',
-    content TEXT(0) NOT NULL COMMENT '评论内容',
-    time VARCHAR(40) NOT NULL COMMENT '评论时间',
+    id        INT          NOT NULL AUTO_INCREMENT,
+    articleid VARCHAR(40)  NOT NULL COMMENT '文章id',
+    name      VARCHAR(100) NOT NULL COMMENT '用户名称',
+    avatar    VARCHAR(100) NOT NULL COMMENT '头像',
+    content   TEXT(0)      NOT NULL COMMENT '评论内容',
+    time      VARCHAR(40)  NOT NULL COMMENT '评论时间',
     PRIMARY KEY (id)
   );
 `
